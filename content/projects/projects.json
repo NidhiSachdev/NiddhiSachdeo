@@ -1,0 +1,22 @@
+{
+  "projects": [
+    {
+      "title": "DORA - Digital Order Routing Assistant",
+      "description": "An AI-driven automation project that accelerates order resolution through intelligent detection, error classification with 100+ pattern-matching rules, smart routing to SAP or Delivery teams, and scalable real-time processing with sub-minute analysis. Features 24/7 monitoring, comprehensive audit trails, and serverless infrastructure.",
+      "category": "Agentic AI",
+      "tech": ["Python", "AWS Lambda", "Agentic AI", "SQL", "Serverless"],
+      "github": "https://github.com/NidhiSachdev",
+      "demo": null,
+      "date": "Oct 2025 - Dec 2025"
+    },
+    {
+      "title": "MoodMiles - Trip That Matches Your Vibe",
+      "description": "A personalized travel planning application that creates mood-based, budget-friendly itineraries with curated experiences. Uses mood-based algorithms to recommend destinations, activities, and experiences aligned with emotional states. Features dynamic real-time itinerary adjustments and data analytics-driven recommendations.",
+      "category": "AI Travel App",
+      "tech": ["Python", "AI/ML", "JavaScript", "API Integration", "Data Analytics"],
+      "github": "https://github.com/NidhiSachdev",
+      "demo": null,
+      "date": "Dec 2025 - Jan 2026"
+    }
+  ]
+}

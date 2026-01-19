@@ -1,0 +1,44 @@
+{
+  "posts": [
+    {
+      "slug": "building-agentic-ai-solutions",
+      "title": "Building Agentic AI Solutions: A Practical Guide",
+      "excerpt": "Learn how to build autonomous AI agents that can automate complex workflows, make decisions, and handle tasks independently.",
+      "date": "2026-01-15",
+      "category": "Agentic AI",
+      "author": "Niddhi Sachdeo",
+      "keywords": ["Agentic AI", "automation", "AI agents", "Python", "AWS Lambda"],
+      "content": "# Building Agentic AI Solutions\n\nAgentic AI represents a paradigm shift in how we approach automation. Here's what I've learned building production AI agents.\n\n## What is Agentic AI?\n\nAgentic AI systems can:\n- Make autonomous decisions\n- Handle complex multi-step workflows\n- Learn and adapt from outcomes\n- Operate with minimal human intervention\n\n## Key Components\n\n1. **Perception** - Understanding the environment\n2. **Reasoning** - Making decisions\n3. **Action** - Executing tasks\n4. **Learning** - Improving over time\n\n## Real-World Example: DORA\n\nIn my project DORA (Digital Order Routing Assistant), I implemented:\n- Automated stuck order detection\n- 100+ pattern-matching rules for error classification\n- Smart routing to appropriate teams\n- Sub-minute analysis and resolution\n\n## Getting Started\n\n1. Define clear objectives\n2. Start with rule-based systems\n3. Add ML for pattern recognition\n4. Implement feedback loops\n\nAgentic AI is the future of automation!"
+    },
+    {
+      "slug": "aws-serverless-architecture",
+      "title": "AWS Serverless Architecture for AI Applications",
+      "excerpt": "How to leverage AWS Lambda, S3, and CloudWatch to build scalable, cost-effective AI-powered applications.",
+      "date": "2026-01-10",
+      "category": "Cloud",
+      "author": "Niddhi Sachdeo",
+      "keywords": ["AWS", "serverless", "Lambda", "cloud computing", "architecture"],
+      "content": "# AWS Serverless Architecture for AI\n\nServerless is perfect for AI workloads. Here's why and how.\n\n## Why Serverless for AI?\n\n- Pay only for what you use\n- Auto-scaling for variable loads\n- No server management\n- Focus on code, not infrastructure\n\n## Key AWS Services\n\n### Lambda\nPerfect for event-driven AI processing:\n```python\ndef lambda_handler(event, context):\n    # Process AI inference\n    result = model.predict(event['data'])\n    return {'statusCode': 200, 'body': result}\n```\n\n### S3\nStore models, data, and outputs.\n\n### CloudWatch\nMonitor and log everything.\n\n## Architecture Pattern\n\n1. API Gateway triggers Lambda\n2. Lambda loads model from S3\n3. Process request\n4. Store results\n5. Return response\n\n## Best Practices\n\n- Keep functions focused\n- Optimize cold starts\n- Use layers for dependencies\n- Implement proper error handling\n\nServerless + AI = Powerful combination!"
+    },
+    {
+      "slug": "devops-for-developers",
+      "title": "DevOps Essentials for Software Developers",
+      "excerpt": "A developer's guide to DevOps practices, CI/CD pipelines, Docker, and Kubernetes for better deployments.",
+      "date": "2026-01-05",
+      "category": "DevOps",
+      "author": "Niddhi Sachdeo",
+      "keywords": ["DevOps", "Docker", "Kubernetes", "CI/CD", "automation"],
+      "content": "# DevOps Essentials for Developers\n\nAs part of my IIT Roorkee certification in Cloud Computing and DevOps, I've learned these essential practices.\n\n## Core DevOps Principles\n\n1. **Automation** - Automate everything possible\n2. **Continuous Integration** - Merge frequently\n3. **Continuous Deployment** - Deploy automatically\n4. **Monitoring** - Observe everything\n\n## Docker Basics\n\n```dockerfile\nFROM python:3.9-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\nCOPY . .\nCMD [\"python\", \"app.py\"]\n```\n\n## Kubernetes Concepts\n\n- **Pods** - Smallest deployable unit\n- **Services** - Network abstraction\n- **Deployments** - Manage replicas\n\n## CI/CD Pipeline\n\n1. Code commit\n2. Build\n3. Test\n4. Deploy to staging\n5. Deploy to production\n\nDevOps is not just tools, it's a culture!"
+    },
+    {
+      "slug": "my-journey-in-tech",
+      "title": "My 4-Year Journey as a Software Developer",
+      "excerpt": "Reflections on my career at Amdocs, learnings, challenges, and growth as a woman in tech.",
+      "date": "2025-12-28",
+      "category": "Career",
+      "author": "Niddhi Sachdeo",
+      "keywords": ["career", "women in tech", "software developer", "Amdocs", "growth"],
+      "content": "# My 4-Year Journey in Tech\n\nFrom a fresh graduate to building AI-powered solutions - here's my story.\n\n## The Beginning (2021)\n\nJoining Amdocs as a fresh graduate was exciting and overwhelming. I had theoretical knowledge but the real world was different.\n\n## Key Learnings\n\n1. **Technical skills are just the start** - Communication matters equally\n2. **Ask questions** - No one expects you to know everything\n3. **Document everything** - Future you will thank present you\n4. **Build relationships** - Tech is a team sport\n\n## Challenges & Growth\n\n- Imposter syndrome is real (and normal)\n- Working with legacy systems teaches patience\n- Client interactions build confidence\n- Every bug is a learning opportunity\n\n## Recent Achievements\n\n- Built DORA - an AI-driven automation system\n- Created MoodMiles - a personalized travel app\n- Pursuing Advanced Certification from IIT Roorkee\n- AWS Cloud Practitioner certified\n\n## Advice for New Developers\n\n- Be curious, not afraid\n- Build projects outside work\n- Find mentors\n- Embrace continuous learning\n\nThe journey continues!"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Robots.txt for Niddhi Sachdeo Portfolio
+# https://niddhisachdeo.github.io
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://niddhisachdeo.github.io/sitemap.xml
