@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,14 @@ const AMDOCS = {
   ] as const,
 };
 
+
+const CAREER_MILESTONES = [
+  { date: "Sept 2021", label: "Joined Amdocs as Software Developer" },
+  { date: "2022", label: "AWS Cloud Practitioner Certified" },
+  { date: "2023", label: "Specialized in Database & Cloud Ops" },
+  { date: "2024", label: "Cloud Computing & DevOps - IIT Roorkee" },
+  { date: "2025", label: "Built OpsAI Agent – DORA" },
+] as const;
 
 const headerVariants = {
   hidden: { opacity: 0 },
