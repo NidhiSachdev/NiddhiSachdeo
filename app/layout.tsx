@@ -51,7 +51,7 @@ export default function RootLayout({
         {/* Fixed background image layer */}
         <div
           className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/bg-starfield.jpg')" }}
+          style={{ backgroundImage: "url('/NiddhiSachdeo/images/bg-starfield.jpg')" }}
           aria-hidden
         />
         <div

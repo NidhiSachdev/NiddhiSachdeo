@@ -157,7 +157,7 @@ export function About() {
             >
               <div className="relative overflow-hidden rounded-2xl bg-background">
                 <Image
-                  src="/images/about.jpg"
+                  src="/NiddhiSachdeo/images/about.jpg"
                   alt="Niddhi working"
                   width={400}
                   height={480}
@@ -197,21 +197,6 @@ export function About() {
 
           {/* Bio + quick info */}
           <motion.div variants={itemVariants} className="flex flex-col gap-8">
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
-              <div className={cn("rounded-xl px-3 py-4 text-center", "glass glass-hover")}>
-                <h3 className="text-sm font-semibold text-foreground sm:text-base">Experience</h3>
-                <p className="mt-1 text-xs text-muted sm:text-sm">4+ Years at Amdocs</p>
-              </div>
-              <div className={cn("rounded-xl px-3 py-4 text-center", "glass glass-hover")}>
-                <h3 className="text-sm font-semibold text-foreground sm:text-base">Education</h3>
-                <p className="mt-1 text-xs text-muted sm:text-sm">B.E. Computer Science</p>
-              </div>
-              <div className={cn("rounded-xl px-3 py-4 text-center", "glass glass-hover")}>
-                <h3 className="text-sm font-semibold text-foreground sm:text-base">Projects</h3>
-                <p className="mt-1 text-xs text-muted sm:text-sm">2 AI-Powered Apps</p>
-              </div>
-            </div>
-
             <div className="flex flex-col gap-5">
               <p className="body-text">
                 I&apos;m a passionate Software Developer at <strong>Amdocs</strong> in Pune, specializing in{" "}

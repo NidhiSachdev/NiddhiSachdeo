@@ -373,7 +373,7 @@ export default function Hero() {
                   >
                     <div className="overflow-hidden rounded-[calc(0.75rem-1.5px)]">
                       <Image
-                        src="/images/profile.jpg"
+                        src="/NiddhiSachdeo/images/profile.jpg"
                         width={300}
                         height={360}
                         alt="Niddhi Sachdeo"
@@ -451,7 +451,7 @@ export default function Hero() {
             >
               <motion.div variants={fadeUp}>
                 <a
-                  href="/Niddhi_Sachdeo_Resume.pdf"
+                  href="/NiddhiSachdeo/Niddhi_Sachdeo_Resume.pdf"
                   download
                   className={cn(
                     "inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white",
