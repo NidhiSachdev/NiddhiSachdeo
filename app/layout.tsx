@@ -4,6 +4,8 @@ import SmoothScroller from "@/components/layout/SmoothScroller";
 import CustomCursor from "@/components/ui/CustomCursor";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FunFactButton from "@/components/ui/FunFactButton";
+import GameButton from "@/components/ui/GameButton";
 
 export const metadata: Metadata = {
   title: "Niddhi Sachdeo | Software Developer",
@@ -65,6 +67,8 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </SmoothScroller>
+        <GameButton />
+        <FunFactButton />
       </body>
     </html>
   );
