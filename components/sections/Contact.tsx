@@ -75,10 +75,10 @@ export function Contact() {
 
       <motion.div
         className="relative mx-auto max-w-5xl text-center"
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 36, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: easeCurve }}
+        transition={{ duration: 0.7, ease: easeCurve }}
       >
         <motion.div
           className="mb-6 flex items-center justify-center gap-3"

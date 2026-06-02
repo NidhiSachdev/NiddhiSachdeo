@@ -271,3 +271,34 @@
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.04); }
 }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.4); }
+}
+
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
+@keyframes cupbob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+@keyframes steamgo {
+  0% { stroke-dashoffset: 38; opacity: 0; }
+  25% { opacity: 1; }
+  100% { stroke-dashoffset: -38; opacity: 0; }
+}
+
+@keyframes shad {
+  0%, 100% { width: 90px; opacity: 0.35; }
+  50% { width: 72px; opacity: 0.55; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

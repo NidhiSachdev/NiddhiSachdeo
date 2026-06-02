@@ -50,11 +50,12 @@ const headerVariants = {
 };
 
 const headerItemVariants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 36, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: easeCurve },
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: easeCurve },
   },
 };
 
@@ -67,10 +68,11 @@ const listParentVariants = {
 };
 
 const listItemVariants = {
-  hidden: { opacity: 0, x: -18 },
+  hidden: { opacity: 0, x: -18, filter: "blur(4px)" },
   visible: {
     opacity: 1,
     x: 0,
+    filter: "blur(0px)",
     transition: { duration: 0.5, ease: easeCurve },
   },
 };
