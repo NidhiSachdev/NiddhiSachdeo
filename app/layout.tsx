@@ -6,6 +6,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FunFactButton from "@/components/ui/FunFactButton";
 import GameButton from "@/components/ui/GameButton";
+import IntroLoader from "@/components/ui/IntroLoader";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 export const metadata: Metadata = {
   title: "Niddhi Sachdeo | Software Developer",
@@ -45,7 +47,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -61,6 +63,8 @@ export default function RootLayout({
           aria-hidden
         />
 
+        <IntroLoader />
+        <ScrollProgress />
         <SmoothScroller>
           <CustomCursor />
           <Navbar />

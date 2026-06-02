@@ -20,6 +20,7 @@ import ParticleField, {
   type ParticleMouseRef,
 } from "@/components/three/ParticleField";
 import { cn } from "@/lib/utils";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const shellVariants: Variants = {
   hidden: { opacity: 0 },
@@ -133,6 +134,81 @@ const DESCRIPTION_LINES = [
 
 const TYPING_NAME = "Niddhi Sachdeo";
 const TYPING_PHRASE = "Software Developer";
+
+function MaskedName({ text, startDelay }: { text: string; startDelay: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [maskPos, setMaskPos] = useState({ x: -200, y: -200 });
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    const timeouts: number[] = [];
+    const runTyping = () => {
+      let i = 0;
+      const typeNext = () => {
+        if (cancelled) return;
+        i += 1;
+        setDisplayed(text.slice(0, i));
+        if (i < text.length) {
+          timeouts.push(window.setTimeout(typeNext, 55 + Math.random() * 35));
+        }
+      };
+      timeouts.push(window.setTimeout(typeNext, 400));
+    };
+    timeouts.push(window.setTimeout(runTyping, Math.max(0, startDelay * 1000)));
+    return () => { cancelled = true; timeouts.forEach((id) => window.clearTimeout(id)); };
+  }, [startDelay, text]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setMaskPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setMaskPos({ x: -200, y: -200 });
+  }, []);
+
+  const baseClass = "text-6xl font-bold leading-[1.1] tracking-tight md:text-7xl lg:text-8xl";
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative cursor-none"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Base layer — normal gradient */}
+      <span className={`text-gradient ${baseClass}`}>
+        <span>{displayed}</span>
+        <motion.span
+          className="ml-1 inline-block h-[1.1em] w-[3px] translate-y-0.5 rounded-full bg-accent-purple glow-purple"
+          animate={{ opacity: [1, 0.15, 1] }}
+          transition={{ duration: 0.95, repeat: Infinity, ease: "easeInOut" }}
+          aria-hidden
+        />
+      </span>
+
+      {/* Masked reveal layer — cyan/white gradient revealed by cursor circle */}
+      <span
+        className={`pointer-events-none absolute inset-0 ${baseClass}`}
+        style={{
+          background: "linear-gradient(135deg, #64d2ff, #ffffff, #bf5af2)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          clipPath: `circle(80px at ${maskPos.x}px ${maskPos.y}px)`,
+          transition: "clip-path 0.15s ease-out",
+        }}
+        aria-hidden
+      >
+        <span>{displayed}</span>
+        <span className="ml-1 inline-block h-[1.1em] w-[3px] translate-y-0.5 rounded-full opacity-0" />
+      </span>
+    </div>
+  );
+}
 
 function TypingText({ text, startDelay, className }: { text: string; startDelay: number; className?: string }) {
   const [displayed, setDisplayed] = useState("");
@@ -309,94 +385,36 @@ export default function Hero() {
         animate="visible"
       >
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-10 lg:flex-row lg:items-center lg:gap-16 xl:gap-20">
-          {/* Portrait — mobile first (top), desktop right */}
+          {/* Caricature sticker + floating info cards */}
           <motion.div
-            className="relative mx-auto flex w-full max-w-[min(100%,420px)] shrink-0 justify-center lg:order-2 lg:mx-0 lg:max-w-none lg:flex-1 lg:justify-center lg:self-start"
+            className="relative mx-auto flex w-full max-w-[min(100%,500px)] shrink-0 items-start justify-center lg:order-2 lg:mx-0 lg:max-w-none lg:flex-1 lg:justify-center lg:-mt-56"
             variants={fadeUpBlur}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.2 }}
           >
-            <div className="relative flex w-full max-w-[200px] flex-col items-center sm:max-w-[220px] lg:max-w-[240px]">
-              {/* Lanyard clip — fixed anchor at top */}
-              <div className="relative z-10 flex flex-col items-center">
-                {/* Metal clip */}
-                <div className="h-6 w-10 rounded-t-lg border-2 border-white/25 bg-gradient-to-b from-white/20 to-white/5" />
-                {/* Lanyard string */}
-                <div className="h-6 w-[2px] bg-gradient-to-b from-white/25 to-accent-purple/50 sm:h-7" />
-              </div>
-
-              {/* Swinging ID card */}
+            <div className="relative w-full max-w-[480px]">
               <motion.div
-                className="relative"
-                style={{ transformOrigin: "top center" }}
-                animate={{ rotate: [3, -3, 3] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                className="pointer-events-none absolute -inset-10 rounded-[40%] bg-gradient-to-tr from-accent-blue/25 via-accent-purple/15 to-accent-cyan/10 blur-3xl"
+                animate={{ opacity: [0.4, 0.75, 0.4] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden
+              />
+
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
-                {/* Ambient glow behind card */}
-                <motion.div
-                  className="pointer-events-none absolute -inset-6 rounded-[40%] bg-gradient-to-tr from-accent-blue/30 via-accent-purple/20 to-accent-cyan/15 blur-3xl"
-                  animate={{ opacity: [0.5, 0.85, 0.5] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  aria-hidden
+                <Image
+                  src="/NiddhiSachdeo/images/niddhi-caricature.png"
+                  width={480}
+                  height={480}
+                  alt="Niddhi Sachdeo caricature"
+                  priority
+                  className="relative z-[1] w-full rounded-2xl object-contain drop-shadow-[0_20px_60px_rgba(124,58,237,0.3)]"
                 />
-
-                {/* The card — gradient border wrapper */}
-                <div
-                  className="relative rounded-2xl p-[1.5px]"
-                  style={{
-                    background: "linear-gradient(135deg, #0a84ff, #bf5af2)",
-                    boxShadow:
-                      "0 20px 60px -12px rgba(10,132,255,0.3), 0 0 40px rgba(191,90,242,0.2), 0 0 80px rgba(10,132,255,0.1)",
-                  }}
-                >
-                <div
-                  className="relative overflow-hidden rounded-[calc(1rem-1.5px)] p-1"
-                  style={{
-                    background: "#f2f2f5",
-                    boxShadow: "inset 0 0 20px rgba(191,90,242,0.05)",
-                  }}
-                >
-                  {/* Lanyard hole */}
-                  <div className="flex justify-center pb-2 pt-3">
-                    <div className="h-3 w-8 rounded-full border border-gray-300 bg-gray-100" />
-                  </div>
-
-                  {/* Photo */}
-                  <div
-                    className="mx-3 rounded-xl p-[1.5px]"
-                    style={{ background: "linear-gradient(135deg, #0a84ff, #bf5af2)" }}
-                  >
-                    <div className="overflow-hidden rounded-[calc(0.75rem-1.5px)]">
-                      <Image
-                        src="/NiddhiSachdeo/images/profile.jpg"
-                        width={300}
-                        height={360}
-                        alt="Niddhi Sachdeo"
-                        priority
-                        className="aspect-[4/5] w-full object-cover object-top"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Info below photo */}
-                  <div className="px-3 pb-4 pt-3 text-center">
-                    <h3 className="text-sm font-bold tracking-tight text-gray-900 sm:text-base">
-                      Niddhi Sachdeo
-                    </h3>
-                    <p className="mt-1 text-xs font-medium text-purple-600">
-                      Software Developer
-                    </p>
-                    <div className="mx-auto mt-2 h-px w-10 bg-gradient-to-r from-transparent via-blue-400/60 to-transparent" />
-                    <p className="mt-1.5 text-[10px] text-gray-500">Pune, India</p>
-                  </div>
-                </div>
-                </div>
               </motion.div>
+
             </div>
           </motion.div>
 
@@ -419,11 +437,7 @@ export default function Hero() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.4 }}
             >
-              <TypingText
-                text={TYPING_NAME}
-                startDelay={0.4}
-                className="text-gradient text-6xl font-bold leading-[1.1] tracking-tight md:text-7xl lg:text-8xl"
-              />
+              <MaskedName text={TYPING_NAME} startDelay={0.4} />
             </motion.div>
 
             <motion.div variants={fadeUp} className="mt-6 md:mt-8">
@@ -450,31 +464,35 @@ export default function Hero() {
               className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center"
             >
               <motion.div variants={fadeUp}>
-                <a
-                  href="/NiddhiSachdeo/Niddhi_Sachdeo_Resume.pdf"
-                  download
-                  className={cn(
-                    "inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white",
-                    "bg-gradient-to-r from-accent-blue to-accent-purple glow-blue",
-                    "shadow-[0_0_44px_rgba(10,132,255,0.35)] transition-[transform,filter] duration-300",
-                    "hover:brightness-110 active:scale-[0.98]",
-                  )}
-                >
-                  <IconDownload className="h-5 w-5 shrink-0" />
-                  Download Resume
-                </a>
+                <MagneticButton strength={0.4}>
+                  <a
+                    href="/NiddhiSachdeo/Niddhi_Sachdeo_Resume.pdf"
+                    download
+                    className={cn(
+                      "inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white",
+                      "bg-gradient-to-r from-accent-blue to-accent-purple glow-blue",
+                      "shadow-[0_0_44px_rgba(10,132,255,0.35)] transition-[transform,filter] duration-300",
+                      "hover:brightness-110 active:scale-[0.98]",
+                    )}
+                  >
+                    <IconDownload className="h-5 w-5 shrink-0" />
+                    Download Resume
+                  </a>
+                </MagneticButton>
               </motion.div>
               <motion.div variants={fadeUp}>
-                <a
-                  href="#contact"
-                  className={cn(
-                    "glass glass-hover inline-flex items-center justify-center rounded-full border border-glass-border px-8 py-3.5 text-base font-semibold text-foreground",
-                    "transition-[box-shadow,border-color] duration-300",
-                    "hover:border-accent-purple/50 hover:shadow-[0_0_32px_rgba(191,90,242,0.28)]",
-                  )}
-                >
-                  Let&apos;s Connect
-                </a>
+                <MagneticButton strength={0.4}>
+                  <a
+                    href="#contact"
+                    className={cn(
+                      "glass glass-hover inline-flex items-center justify-center rounded-full border border-glass-border px-8 py-3.5 text-base font-semibold text-foreground",
+                      "transition-[box-shadow,border-color] duration-300",
+                      "hover:border-accent-purple/50 hover:shadow-[0_0_32px_rgba(191,90,242,0.28)]",
+                    )}
+                  >
+                    Let&apos;s Connect
+                  </a>
+                </MagneticButton>
               </motion.div>
             </motion.div>
 
@@ -485,19 +503,21 @@ export default function Hero() {
               className="mt-12 flex flex-wrap items-center gap-3"
             >
               {socialLinks.map(({ href, label, Icon }) => (
-                <motion.a
-                  key={label}
-                  variants={fadeUp}
-                  href={href}
-                  {...(href.startsWith("mailto") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                  aria-label={label}
-                  className={cn(
-                    "glass glass-hover flex h-11 w-11 items-center justify-center rounded-full text-foreground/90",
-                    "transition-colors hover:text-accent-cyan",
-                  )}
-                >
-                  <Icon className="h-[18px] w-[18px]" />
-                </motion.a>
+                <motion.div key={label} variants={fadeUp}>
+                  <MagneticButton strength={0.5}>
+                    <a
+                      href={href}
+                      {...(href.startsWith("mailto") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                      aria-label={label}
+                      className={cn(
+                        "glass glass-hover flex h-11 w-11 items-center justify-center rounded-full text-foreground/90",
+                        "transition-colors hover:text-accent-cyan",
+                      )}
+                    >
+                      <Icon className="h-[18px] w-[18px]" />
+                    </a>
+                  </MagneticButton>
+                </motion.div>
               ))}
             </motion.div>
           </motion.div>
