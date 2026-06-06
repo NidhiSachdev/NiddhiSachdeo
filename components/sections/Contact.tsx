@@ -24,6 +24,16 @@ const socialLinks = [
       </svg>
     ),
   },
+  {
+    label: "Email",
+    href: "mailto:nidhisachdeo2000@gmail.com",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="h-5 w-5">
+        <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+        <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+      </svg>
+    ),
+  },
 ] as const;
 
 const contactCards = [
@@ -290,15 +300,7 @@ export function Contact() {
           transition={{ duration: 0.5, ease: easeCurve, delay: 0.18 }}
         >
           <p className="mb-4 text-sm font-medium text-muted">Or reach out directly</p>
-          <motion.a
-            href="mailto:nidhisachdeo2000@gmail.com"
-            className="inline-flex items-center justify-center text-rose-400 transition-colors hover:text-rose-300"
-            whileHover={{ scale: 1.03 }}
-          >
-            nidhisachdeo2000@gmail.com
-          </motion.a>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             {socialLinks.map((item, i) => (
               <motion.a
                 key={item.label}

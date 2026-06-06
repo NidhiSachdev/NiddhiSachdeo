@@ -1,3 +1,5 @@
+"use client";
+
 import ScrollStory from "@/components/ui/ScrollStory";
 import Hero from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";

@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SmoothScroller from "@/components/layout/SmoothScroller";
-import CustomCursor from "@/components/ui/CustomCursor";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import FunFactButton from "@/components/ui/FunFactButton";
-import GameButton from "@/components/ui/GameButton";
-import IntroLoader from "@/components/ui/IntroLoader";
-import ScrollProgress from "@/components/ui/ScrollProgress";
+import ClientShell from "@/components/layout/ClientShell";
 
 export const metadata: Metadata = {
   title: "Niddhi Sachdeo | Software Developer",
@@ -38,8 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                var origError = console.error;
+                console.error = function(){
+                  if(arguments[0] && typeof arguments[0]==='string' && arguments[0].indexOf('hydrat')!==-1) return;
+                  if(arguments[0] && typeof arguments[0]==='object' && arguments[0].message && arguments[0].message.indexOf && arguments[0].message.indexOf('hydrat')!==-1) return;
+                  origError.apply(console, arguments);
+                };
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -51,8 +58,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background text-foreground antialiased">
-        {/* Fixed background image layer */}
+      <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
         <div
           className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/NiddhiSachdeo/images/bg-starfield.jpg')" }}
@@ -62,17 +68,7 @@ export default function RootLayout({
           className="pointer-events-none fixed inset-0 -z-[19] bg-background/75 backdrop-blur-[2px]"
           aria-hidden
         />
-
-        <IntroLoader />
-        <ScrollProgress />
-        <SmoothScroller>
-          <CustomCursor />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroller>
-        <GameButton />
-        <FunFactButton />
+        <ClientShell>{children}</ClientShell>
       </body>
     </html>
   );

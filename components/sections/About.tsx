@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, getExperienceLabel } from "@/lib/utils";
 
 const easeCurve = [0.22, 1, 0.36, 1] as const;
 
@@ -178,7 +178,7 @@ export function About() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.35, duration: 0.45, ease: easeCurve }}
               >
-                <p className="text-xs font-semibold tracking-wide text-foreground">4+ Years Experience</p>
+                <p className="text-xs font-semibold tracking-wide text-foreground">{getExperienceLabel()}</p>
               </motion.div>
 
               <motion.div

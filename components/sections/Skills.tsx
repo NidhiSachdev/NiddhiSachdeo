@@ -1,79 +1,71 @@
 "use client";
 
-import { motion, useInView, type Variants } from "framer-motion";
-import { useRef } from "react";
+import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const easeCurve = [0.22, 1, 0.36, 1] as const;
 
-type TechnicalSkill = {
-  name: string;
-  percent: number;
-  icon: string;
+type SkillGroup = {
+  label: string;
+  color: string;
+  glow: string;
+  skills: { name: string; icon: string }[];
 };
 
-type SkillCategory = {
-  title: string;
-  headerIcon: string;
-  skills: TechnicalSkill[];
-};
-
-/** Desktop grid order: row1 PL | AI, row2 Cloud | DB */
-const skillCategories: SkillCategory[] = [
+const skillGroups: SkillGroup[] = [
   {
-    title: "Programming Languages",
-    headerIcon: "💻",
+    label: "Languages",
+    color: "#3b82f6",
+    glow: "rgba(59,130,246,0.3)",
     skills: [
-      { name: "Java", percent: 90, icon: "☕" },
-      { name: "Python", percent: 85, icon: "🐍" },
-      { name: "C/C++", percent: 80, icon: "⚙️" },
-      { name: "PL/SQL & Bash", percent: 75, icon: "💻" },
+      { name: "Java", icon: "☕" },
+      { name: "Python", icon: "🐍" },
+      { name: "C/C++", icon: "⚙️" },
+      { name: "PL/SQL", icon: "💻" },
     ],
   },
   {
-    title: "AI & Machine Learning",
-    headerIcon: "🧬",
+    label: "AI / ML",
+    color: "#a855f7",
+    glow: "rgba(168,85,247,0.3)",
     skills: [
-      { name: "Agentic AI Solutions", percent: 85, icon: "🤖" },
-      { name: "AI-Driven Automation", percent: 80, icon: "🔄" },
-      { name: "Machine Learning", percent: 70, icon: "🧠" },
+      { name: "Agentic AI", icon: "🤖" },
+      { name: "AI Automation", icon: "🔄" },
+      { name: "Machine Learning", icon: "🧠" },
     ],
   },
   {
-    title: "Cloud & DevOps",
-    headerIcon: "☁️",
+    label: "Cloud & DevOps",
+    color: "#10b981",
+    glow: "rgba(16,185,129,0.3)",
     skills: [
-      { name: "AWS (EC2, S3, Lambda)", percent: 85, icon: "☁️" },
-      { name: "Linux / Unix", percent: 85, icon: "🐧" },
-      { name: "Docker & Kubernetes", percent: 70, icon: "🐳" },
-      { name: "Shell Scripting", percent: 75, icon: "📜" },
+      { name: "AWS", icon: "☁️" },
+      { name: "Linux", icon: "🐧" },
+      { name: "Docker & K8s", icon: "🐳" },
+      { name: "Shell Script", icon: "📜" },
     ],
   },
   {
-    title: "Database & Web",
-    headerIcon: "🗄️",
+    label: "Database & Web",
+    color: "#f97316",
+    glow: "rgba(249,115,22,0.3)",
     skills: [
-      { name: "SQL / PostgreSQL", percent: 90, icon: "🗄️" },
-      { name: "MongoDB / Couchbase", percent: 75, icon: "🍃" },
-      { name: "HTML, CSS, Angular", percent: 75, icon: "🌐" },
+      { name: "SQL", icon: "🗄️" },
+      { name: "MongoDB", icon: "🍃" },
+      { name: "Angular", icon: "🌐" },
     ],
   },
 ];
 
 const personalSkills = [
-  "Problem Solving",
-  "Critical Thinking",
-  "Analytical Skills",
-  "Attention to Detail",
-  "Time Management",
-  "Work Ethics",
-  "Decision Making",
-  "Client Handling",
-] as const;
-
-const marqueeNames = [
-  ...skillCategories.flatMap((c) => c.skills.map((s) => s.name)),
-  ...personalSkills,
+  { name: "Problem Solving", icon: "🧩" },
+  { name: "Critical Thinking", icon: "💡" },
+  { name: "Analytical", icon: "📊" },
+  { name: "Detail Oriented", icon: "🔍" },
+  { name: "Time Mgmt", icon: "⏰" },
+  { name: "Work Ethics", icon: "💪" },
+  { name: "Decision Making", icon: "🎯" },
+  { name: "Client Handling", icon: "🤝" },
 ];
 
 const headerContainerVariants: Variants = {
@@ -94,169 +86,70 @@ const headerItemVariants: Variants = {
   },
 };
 
-const categoryGridVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.14, delayChildren: 0.12 },
-  },
-};
-
-const categoryCardVariants: Variants = {
-  hidden: { opacity: 0, y: 36, scale: 0.97 },
+const boxVariants: Variants = {
+  hidden: { opacity: 0, y: 28, scale: 0.96 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.65, ease: easeCurve },
+    transition: { duration: 0.6, ease: easeCurve },
   },
 };
 
-const personalSectionVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
-  },
-};
-
-const pillVariants: Variants = {
-  hidden: { opacity: 0, y: 16, scale: 0.92 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.45, ease: easeCurve },
-  },
-};
-
-function SkillMarquee() {
-  const loop = [...marqueeNames, ...marqueeNames];
-
+function SkillBox({ group, index }: { group: SkillGroup; index: number }) {
   return (
-    <div
+    <motion.div
+      variants={boxVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ delay: index * 0.1 }}
+      whileHover={{ y: -5, transition: { duration: 0.25 } }}
       className={cn(
-        "relative mb-14 overflow-hidden rounded-xl border border-glass-border bg-glass py-4 backdrop-blur-md",
-        "glow-border"
+        "group relative overflow-hidden rounded-2xl border border-glass-border bg-glass/40 p-6",
+        "backdrop-blur-md transition-shadow duration-300",
       )}
+      style={{
+        borderTopWidth: 3,
+        borderTopColor: group.color,
+      }}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-background via-background/90 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-background via-background/90 to-transparent" />
-      <motion.div
-        className="flex w-max gap-10 px-8"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 42,
-            ease: "linear",
-          },
-        }}
-      >
-        {loop.map((name, i) => (
-          <span
-            key={`${name}-${i}`}
-            className="shrink-0 text-sm font-medium tracking-wide text-muted"
-          >
-            {name}
-            <span className="mx-8 text-glass-border">◆</span>
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-function SkillProgressBar({
-  skill,
-  staggerIndex,
-  categoryInView,
-}: {
-  skill: TechnicalSkill;
-  staggerIndex: number;
-  categoryInView: boolean;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-start justify-between gap-3">
-        <span className="flex min-w-0 items-center gap-2.5">
-          <span className="text-lg leading-none select-none" aria-hidden>
-            {skill.icon}
-          </span>
-          <span className="truncate text-sm font-medium text-foreground">{skill.name}</span>
-        </span>
-        <span className="shrink-0 tabular-nums text-sm font-semibold text-orange-400">
-          {skill.percent}%
-        </span>
-      </div>
       <div
-        className={cn(
-          "relative h-2.5 overflow-hidden rounded-full border border-glass-border bg-glass/90 backdrop-blur-sm"
-        )}
-      >
-        <motion.div
-          className={cn(
-            "h-full rounded-full bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-500",
-            "bg-[length:200%_100%] shadow-[0_0_12px_rgba(249,115,22,0.35)]"
-          )}
-          initial={{ width: "0%" }}
-          animate={categoryInView ? { width: `${skill.percent}%` } : { width: "0%" }}
-          transition={{
-            duration: 1.25,
-            delay: staggerIndex * 0.09,
-            ease: easeCurve,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function CategoryCard({ category, cardIndex }: { category: SkillCategory; cardIndex: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const categoryInView = useInView(ref, { once: true, margin: "-12% 0px -8% 0px", amount: 0.2 });
-
-  return (
-    <motion.article
-      ref={ref}
-      variants={categoryCardVariants}
-      className={cn(
-        "noise relative flex flex-col gap-6 rounded-2xl p-6 sm:p-7",
-        "glass glass-hover glow-border",
-        "border border-glass-border",
-        cardIndex % 2 === 0 ? "hover:glow-orange" : "hover:glow-amber"
-      )}
-    >
-      <header className="relative z-[2] flex items-center gap-3 border-b border-glass-border pb-4">
-        <span
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-glass-border bg-glass/80 text-xl backdrop-blur-sm"
-          aria-hidden
-        >
-          {category.headerIcon}
-        </span>
-        <div className="min-w-0">
-          <h3 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
-            {category.title}
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle at 50% 30%, ${group.glow}, transparent 70%)`,
+        }}
+      />
+      <div className="relative z-[1]">
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            className="inline-block h-3 w-3 rounded-full"
+            style={{ background: group.color, boxShadow: `0 0 10px ${group.glow}` }}
+          />
+          <h3 className="text-sm font-semibold uppercase tracking-wider" style={{ color: group.color }}>
+            {group.label}
           </h3>
-          <p className="mt-0.5 text-xs font-medium uppercase tracking-wider text-muted">
-            Technical proficiency
-          </p>
         </div>
-      </header>
-
-      <ul className="relative z-[2] flex flex-col gap-5">
-        {category.skills.map((skill, i) => (
-          <li key={skill.name}>
-            <SkillProgressBar
-              skill={skill}
-              staggerIndex={i}
-              categoryInView={categoryInView}
-            />
-          </li>
-        ))}
-      </ul>
-    </motion.article>
+        <div className="flex flex-wrap gap-2.5">
+          {group.skills.map((skill) => (
+            <span
+              key={skill.name}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-lg border border-glass-border bg-white/[0.04] px-3.5 py-2",
+                "text-sm font-medium text-foreground/90 transition-all duration-200",
+                "hover:bg-white/[0.08] hover:text-foreground",
+              )}
+              style={{
+                borderColor: `${group.color}25`,
+              }}
+            >
+              <span className="text-base leading-none" aria-hidden>{skill.icon}</span>
+              {skill.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -269,7 +162,6 @@ export function Skills() {
         "animated-grid"
       )}
     >
-      {/* Decorative gradient orbs */}
       <div
         className="pointer-events-none absolute -left-40 top-12 -z-10 h-[26rem] w-[26rem] rounded-full opacity-[0.22] blur-[120px]"
         style={{
@@ -286,14 +178,6 @@ export function Skills() {
         }}
         aria-hidden
       />
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.08] blur-[100px]"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(245,158,11,0.35) 0%, transparent 65%)",
-        }}
-        aria-hidden
-      />
 
       <motion.div
         className="noise relative z-[2] mx-auto max-w-6xl"
@@ -302,10 +186,6 @@ export function Skills() {
         viewport={{ once: true, margin: "-100px" }}
         variants={headerContainerVariants}
       >
-        <motion.div variants={headerItemVariants} className="mb-8">
-          <SkillMarquee />
-        </motion.div>
-
         <motion.div variants={headerItemVariants} className="mb-5 flex items-center gap-3">
           <span className="text-xs font-semibold uppercase tracking-[0.35em] text-orange-400">
             WHAT I KNOW
@@ -318,7 +198,7 @@ export function Skills() {
 
         <motion.h2
           variants={headerItemVariants}
-          className="section-heading mb-14 max-w-4xl text-foreground"
+          className="section-heading mb-12 max-w-4xl text-foreground"
         >
           <span className="block">My Skills &</span>
           <span className="block">
@@ -326,66 +206,40 @@ export function Skills() {
           </span>
         </motion.h2>
 
-        <motion.div
-          className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8"
-          variants={categoryGridVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          {skillCategories.map((category, index) => (
-            <CategoryCard key={category.title} category={category} cardIndex={index} />
+        <div className="grid gap-6 sm:grid-cols-2">
+          {skillGroups.map((group, i) => (
+            <SkillBox key={group.label} group={group} index={i} />
           ))}
-        </motion.div>
+        </div>
 
-        {/* Personal Skills */}
-        <motion.div
-          className="relative mt-20"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={personalSectionVariants}
-        >
-          <motion.h3
-            variants={headerItemVariants}
-            className="mb-8 text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
-          >
+        {/* Personal Skills — single scrolling bar */}
+        <motion.div variants={headerItemVariants} className="mt-16">
+          <h3 className="mb-6 text-lg font-semibold text-foreground/90">
             Personal Skills
-          </motion.h3>
-
-          <motion.div
-            variants={headerItemVariants}
-            className="rounded-2xl border border-glass-border bg-glass/50 p-6 backdrop-blur-md sm:p-8"
+          </h3>
+          <div
+            className="relative overflow-hidden rounded-full border border-pink-500/30 bg-glass/30 py-3 backdrop-blur-md"
+            style={{
+              boxShadow: "0 0 20px rgba(236,72,153,0.15), inset 0 0 30px rgba(236,72,153,0.05)",
+            }}
           >
-            <motion.div
-              className="flex flex-wrap justify-center gap-3 sm:justify-start sm:gap-4"
-              variants={personalSectionVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-            >
-              {personalSkills.map((label, i) => (
-                <motion.span
-                  key={label}
-                  variants={pillVariants}
-                  custom={i}
-                  className={cn(
-                    "inline-flex items-center rounded-full border border-glass-border bg-glass/90 px-5 py-2.5",
-                    "text-sm font-medium text-foreground shadow-sm backdrop-blur-md",
-                    "transition-all duration-300 will-change-transform",
-                    "hover:z-[1] hover:-translate-y-1 hover:border-orange-400/35 hover:shadow-[0_0_28px_rgba(249,115,22,0.28),0_0_48px_rgba(245,158,11,0.12)]",
-                    "hover:glow-orange"
-                  )}
-                  style={{
-                    animation: `float ${6 + (i % 4) * 0.45}s ease-in-out infinite`,
-                    animationDelay: `${(i * 0.21) % 2.4}s`,
-                  }}
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-black to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-black to-transparent" />
+            <div className="flex w-max animate-marquee items-center gap-8 px-4">
+              {[...personalSkills, ...personalSkills, ...personalSkills].map((skill, i) => (
+                <span
+                  key={`${skill.name}-${i}`}
+                  className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground/90"
                 >
-                  {label}
-                </motion.span>
+                  <span className="text-base" aria-hidden>{skill.icon}</span>
+                  {skill.name}
+                  {i < personalSkills.length * 3 - 1 && (
+                    <span className="ml-6 text-pink-500/40">●</span>
+                  )}
+                </span>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
     </section>

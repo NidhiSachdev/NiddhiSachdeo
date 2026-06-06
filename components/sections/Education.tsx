@@ -245,41 +245,38 @@ export function Education() {
         </motion.h3>
 
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="mb-16 grid grid-cols-2 gap-4 lg:grid-cols-3"
+          variants={itemVariants}
+          className="relative mb-16 overflow-hidden"
         >
-          {certifications.map((cert, i) => (
-            <motion.article
-              key={`${cert.title}-${i}`}
-              variants={itemVariants}
-              whileHover={{ y: -3, scale: 1.01 }}
-              transition={{ duration: 0.25 }}
-              className={cn(
-                "glow-border rounded-2xl border border-glass-border p-4",
-                "glass glass-hover",
-                "shadow-[0_12px_40px_rgba(10,132,255,0.06)]",
-                "hover:shadow-[0_16px_48px_rgba(191,90,242,0.12)]"
-              )}
-            >
-              <div className="mb-3 flex items-center gap-3">
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-background to-transparent" />
+          <div className="flex w-max animate-marquee-cert gap-5">
+            {[...certifications, ...certifications].map((cert, i) => (
+              <article
+                key={`${cert.title}-${i}`}
+                className={cn(
+                  "flex shrink-0 items-center gap-3 rounded-2xl border border-glass-border px-5 py-4",
+                  "glass",
+                  "shadow-[0_12px_40px_rgba(10,132,255,0.06)]"
+                )}
+              >
                 <span className="text-2xl" aria-hidden>
                   {cert.icon}
                 </span>
-                <h4 className="text-sm font-semibold leading-snug text-foreground">
-                  {cert.title}
-                </h4>
-              </div>
-              {cert.issuer ? (
-                <p className="text-xs text-muted">{cert.issuer}</p>
-              ) : null}
-              {cert.meta ? (
-                <p className="mt-1 text-xs text-sky-400">{cert.meta}</p>
-              ) : null}
-            </motion.article>
-          ))}
+                <div className="whitespace-nowrap">
+                  <h4 className="text-sm font-semibold leading-snug text-foreground">
+                    {cert.title}
+                  </h4>
+                  {cert.issuer ? (
+                    <p className="text-xs text-muted">{cert.issuer}</p>
+                  ) : null}
+                  {cert.meta ? (
+                    <p className="mt-0.5 text-xs text-sky-400">{cert.meta}</p>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
         </motion.div>
 
         {/* Co-curricular */}

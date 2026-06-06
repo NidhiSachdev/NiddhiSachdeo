@@ -12,12 +12,12 @@ const AMDOCS = {
   period: "Sept 2021 - Present",
   location: "Pune, Maharashtra",
   achievements: [
-    "Designed and implemented OpsAI Agent – DORA to accelerate operational issue resolution, reducing turnaround time and improving efficiency",
+    "Designed and implemented OpsAI Agent – DORA, reducing operational issue resolution time by ~40%, cutting average turnaround from hours to minutes",
     "Performed in-depth analysis of Auto Debit Adjustment (ADA) processes for Philippines operations, identifying gaps and recommending improvements",
-    "Enhanced application functionality by integrating customer-requested changes, improving user experience and satisfaction",
-    "Delivered end-to-end application support by resolving critical issues and collaborating with stakeholders",
+    "Delivered 10+ customer-requested feature enhancements, improving satisfaction scores across 3 client accounts",
+    "Resolved 100+ production issues with <2hr SLA breach rate, maintaining 99%+ uptime for critical telecom services",
     "Earned AWS Cloud Practitioner certification to strengthen cloud expertise",
-    "Automated complex logical workflows and database operations, improving system performance and scalability",
+    "Automated 5+ manual workflows, saving ~8 hours/week of operational effort",
     "Specialized in database management with Couchbase, PostgreSQL, and leveraged Kibana for real-time data visualization",
   ] as const,
   technologies: [

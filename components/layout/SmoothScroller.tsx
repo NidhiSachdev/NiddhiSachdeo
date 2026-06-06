@@ -8,20 +8,24 @@ type SmoothScrollerProps = {
   children: ReactNode;
 };
 
-const defaultEasing = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+const creamEasing = (t: number) => {
+  if (t === 0) return 0;
+  if (t === 1) return 1;
+  return 1 - Math.pow(2, -12 * t);
+};
 
 export default function SmoothScroller({ children }: SmoothScrollerProps) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: defaultEasing,
+      duration: 1.8,
+      easing: creamEasing,
       smoothWheel: true,
       syncTouch: true,
-      syncTouchLerp: 0.075,
-      wheelMultiplier: 1,
-      touchMultiplier: 1,
+      syncTouchLerp: 0.04,
+      wheelMultiplier: 0.8,
+      touchMultiplier: 0.8,
       infinite: false,
     });
 

@@ -269,7 +269,7 @@ export default function IntroLoader() {
           </div>
 
           <div className="intro-hline">
-            <h1>no cap, this portfolio<br />is <span className="intro-gr">lowkey iconic ✨</span></h1>
+            <h1>This portfolio<br />is <span className="intro-gr">lowkey iconic ✨</span></h1>
           </div>
 
           <div className="intro-tmsg">

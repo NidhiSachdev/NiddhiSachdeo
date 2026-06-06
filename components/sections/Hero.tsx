@@ -19,7 +19,7 @@ import {
 import ParticleField, {
   type ParticleMouseRef,
 } from "@/components/three/ParticleField";
-import { cn } from "@/lib/utils";
+import { cn, getExperienceLabel } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
 
 const shellVariants: Variants = {
@@ -127,10 +127,7 @@ function IconMail(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-const DESCRIPTION_LINES = [
-  "Specializing in Agentic AI, scalable app development, and AWS cloud deployment.",
-  "I build intelligent systems that automate workflows, reduce manual effort, and accelerate business processes.",
-] as const;
+const TERMINAL_TEXT = "From idea to deployment — I build systems that think, adapt, and scale.";
 
 const TYPING_NAME = "Niddhi Sachdeo";
 const TYPING_PHRASE = "Software Developer";
@@ -251,6 +248,55 @@ function TypingText({ text, startDelay, className }: { text: string; startDelay:
   );
 }
 
+function TerminalBox({ text, startDelay }: { text: string; startDelay: number }) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timeouts: number[] = [];
+    const run = () => {
+      let i = 0;
+      const next = () => {
+        if (cancelled) return;
+        i += 1;
+        setDisplayed(text.slice(0, i));
+        if (i < text.length) {
+          timeouts.push(window.setTimeout(next, 30 + Math.random() * 25));
+        } else {
+          setDone(true);
+        }
+      };
+      timeouts.push(window.setTimeout(next, 300));
+    };
+    timeouts.push(window.setTimeout(run, Math.max(0, startDelay * 1000)));
+    return () => { cancelled = true; timeouts.forEach(id => window.clearTimeout(id)); };
+  }, [startDelay, text]);
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-glass-border bg-[#0d1117]/80 shadow-lg backdrop-blur-sm">
+      {/* Title bar */}
+      <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
+        <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+        <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+        <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+        <span className="ml-2 text-[11px] font-medium text-white/25">niddhi@dev ~</span>
+      </div>
+      {/* Body */}
+      <div className="px-4 py-3 font-mono text-sm leading-relaxed md:text-base">
+        <span className="text-emerald-400">$</span>
+        <span className="ml-2 text-white/80">{displayed}</span>
+        <motion.span
+          className="ml-0.5 inline-block h-[1.1em] w-[7px] translate-y-0.5 bg-emerald-400/80"
+          animate={{ opacity: [1, 1, 0, 0] }}
+          transition={{ duration: 1, repeat: Infinity, times: [0, 0.49, 0.5, 1] }}
+          aria-hidden
+        />
+      </div>
+    </div>
+  );
+}
+
 function TypingRole({ startDelay }: { startDelay: number }) {
   const [displayed, setDisplayed] = useState("");
 
@@ -343,7 +389,7 @@ export default function Hero() {
   const stats = useMemo(
     () =>
       [
-        { icon: "💼", text: "4+ Years Experience" },
+        { icon: "💼", text: getExperienceLabel() },
         { icon: "🏢", text: "Amdocs" },
         { icon: "☁️", text: "AWS Certified" },
         { icon: "📍", text: "Pune, India" },
@@ -444,17 +490,8 @@ export default function Hero() {
               <TypingRole startDelay={0.85} />
             </motion.div>
 
-            <motion.div
-              variants={columnStagger}
-              initial="hidden"
-              animate="visible"
-              className="mt-6 space-y-3 text-base leading-relaxed text-muted md:text-lg"
-            >
-              {DESCRIPTION_LINES.map((line) => (
-                <motion.p key={line} variants={fadeUp}>
-                  {line}
-                </motion.p>
-              ))}
+            <motion.div variants={fadeUp} className="mt-6 max-w-lg">
+              <TerminalBox text={TERMINAL_TEXT} startDelay={1.6} />
             </motion.div>
 
             <motion.div

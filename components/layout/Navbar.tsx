@@ -19,10 +19,11 @@ import { cn } from "@/lib/utils";
 
 const NAV_SECTIONS = [
   { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "skills", label: "Skills" },
-  { id: "experience", label: "Experience" },
-  { id: "ai", label: "AI" },
+  { id: "education", label: "Education" },
+  { id: "ai", label: "AI Chatbot" },
   { id: "contact", label: "Contact" },
 ] as const;
 
@@ -31,6 +32,8 @@ const MAGNET_STRENGTH = 0.42;
 export type NavbarProps = {
   /** When provided, skips internal Intersection Observer and uses this id as active (e.g. `"about"`). */
   activeSection?: string;
+  /** Called when the AI nav link is clicked instead of scrolling. */
+  onAIClick?: () => void;
 };
 
 function MagneticNavLink({
@@ -38,11 +41,13 @@ function MagneticNavLink({
   children,
   isActive,
   onNavigate,
+  onClick,
 }: {
   href: string;
   children: string;
   isActive: boolean;
   onNavigate?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const shiftX = useMotionValue(0);
@@ -82,7 +87,7 @@ function MagneticNavLink({
         <Link
           ref={ref}
           href={href}
-          onClick={onNavigate}
+          onClick={onClick ?? onNavigate}
           onMouseMove={onMouseMove}
           onMouseLeave={reset}
           className={cn(
@@ -109,7 +114,7 @@ function MagneticNavLink({
   );
 }
 
-export default function Navbar({ activeSection: controlledActive }: NavbarProps) {
+export default function Navbar({ activeSection: controlledActive, onAIClick }: NavbarProps) {
   const [internalActive, setInternalActive] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -120,7 +125,7 @@ export default function Navbar({ activeSection: controlledActive }: NavbarProps)
   const isControlled = controlledActive !== undefined;
   const activeId = isControlled ? controlledActive : internalActive;
 
-  const sectionIds = useMemo(() => NAV_SECTIONS.map((s) => s.id), []);
+  const sectionIds = useMemo(() => NAV_SECTIONS.filter((s) => s.id !== "ai").map((s) => s.id), []);
 
   useEffect(() => {
     if (isControlled) return;
@@ -243,8 +248,11 @@ export default function Navbar({ activeSection: controlledActive }: NavbarProps)
                 }}
               >
                 <MagneticNavLink
-                  href={`#${item.id}`}
+                  href={item.id === "ai" ? "#" : `#${item.id}`}
                   isActive={activeId === item.id}
+                  {...(item.id === "ai" && onAIClick
+                    ? { onClick: (e: React.MouseEvent) => { e.preventDefault(); onAIClick(); } }
+                    : {})}
                 >
                   {item.label}
                 </MagneticNavLink>
@@ -322,8 +330,16 @@ export default function Navbar({ activeSection: controlledActive }: NavbarProps)
                   transition={{ delay: 0.05 * i, duration: 0.35 }}
                 >
                   <Link
-                    href={`#${item.id}`}
-                    onClick={closeMenu}
+                    href={item.id === "ai" ? "#" : `#${item.id}`}
+                    onClick={(e) => {
+                      if (item.id === "ai" && onAIClick) {
+                        e.preventDefault();
+                        closeMenu();
+                        onAIClick();
+                      } else {
+                        closeMenu();
+                      }
+                    }}
                     className={cn(
                       "block rounded-xl px-4 py-3 text-base font-medium transition-all duration-300",
                       "text-muted hover:bg-glass-hover hover:text-foreground",

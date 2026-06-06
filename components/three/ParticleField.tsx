@@ -1,9 +1,21 @@
 "use client";
 
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
+
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("webgl2"))
+    );
+  } catch {
+    return false;
+  }
+}
 
 const PARTICLE_COUNT = 800;
 
@@ -169,6 +181,13 @@ type ParticleFieldProps = {
 export default function ParticleField({ mouseRef: mouseProp }: ParticleFieldProps) {
   const internalMouse = useRef({ x: 0, y: 0 });
   const mouseRef = mouseProp ?? internalMouse;
+  const [webGLSupported, setWebGLSupported] = useState(true);
+
+  useEffect(() => {
+    setWebGLSupported(isWebGLAvailable());
+  }, []);
+
+  if (!webGLSupported) return null;
 
   return (
     <div
