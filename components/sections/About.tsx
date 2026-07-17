@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
-import { cn, getExperienceLabel } from "@/lib/utils";
+import { cn, getExperienceLabel, assetPath } from "@/lib/utils";
 
 const easeCurve = [0.22, 1, 0.36, 1] as const;
 
@@ -158,7 +158,7 @@ export function About() {
             >
               <div className="relative overflow-hidden rounded-2xl bg-background">
                 <Image
-                  src="/images/about.jpg"
+                  src={assetPath("/images/about.jpg")}
                   alt="Niddhi working"
                   width={400}
                   height={480}

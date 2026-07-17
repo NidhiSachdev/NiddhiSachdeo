@@ -542,7 +542,7 @@ export default function Hero() {
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Image
-                  src="/images/niddhi-caricature.png"
+                  src={assetPath("/images/niddhi-caricature.png")}
                   width={480}
                   height={480}
                   alt="Niddhi Sachdeo caricature"
@@ -722,7 +722,7 @@ export default function Hero() {
             className="group flex items-center gap-2.5 rounded-xl border border-glass-border bg-glass/80 px-3 py-2 backdrop-blur-xl transition-all hover:border-accent-purple/40 hover:shadow-[0_0_20px_rgba(191,90,242,0.2)]"
           >
             <Image
-              src="/images/theme-icon.png"
+              src={assetPath("/images/theme-icon.png")}
               alt="Themes"
               width={28}
               height={28}

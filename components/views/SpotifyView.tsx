@@ -114,7 +114,7 @@ export default function SpotifyView() {
             <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#1DB954]/40 via-transparent to-[#1DB954]/20" />
               <Image
-                src="/images/about.jpg"
+                src={assetPath("/images/about.jpg")}
                 alt="Niddhi Sachdeo"
                 width={400}
                 height={400}

@@ -266,7 +266,7 @@ export default function NetflixView() {
           transition={{ duration: 1, delay: 0.3 }}
         >
           <Image
-            src="/images/about.jpg"
+            src={assetPath("/images/about.jpg")}
             alt=""
             width={400}
             height={500}

@@ -296,7 +296,7 @@ function AboutContent() {
         <div className="shrink-0">
           <div className="overflow-hidden rounded-xl border-2 border-white/10 shadow-lg">
             <Image
-              src="/images/profile.jpg"
+              src={assetPath("/images/profile.jpg")}
               alt="Niddhi Sachdeo"
               width={160}
               height={200}
@@ -494,7 +494,7 @@ function ContactContent() {
       {/* Avatar */}
       <div className="mb-4 overflow-hidden rounded-full border-2 border-white/10">
         <Image
-          src="/images/profile.jpg"
+          src={assetPath("/images/profile.jpg")}
           alt="Niddhi Sachdeo"
           width={80}
           height={80}
