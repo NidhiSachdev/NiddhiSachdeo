@@ -48,7 +48,6 @@ export default function CustomCursor() {
 
     const html = document.documentElement;
     const prevCursor = html.style.cursor;
-    html.style.cursor = "none";
 
     const onMove = (e: MouseEvent) => {
       cursorX.set(e.clientX);

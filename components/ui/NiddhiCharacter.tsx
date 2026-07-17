@@ -306,7 +306,7 @@ export default function NiddhiCharacter({
 
               {/* Caricature face */}
               <image
-                href="/NiddhiSachdeo/images/caricature.jpg"
+                href="/images/caricature.jpg"
                 x="34" y="10"
                 width="52" height="52"
                 clipPath="url(#niddhi-head-clip)"

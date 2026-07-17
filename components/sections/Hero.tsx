@@ -2,6 +2,7 @@
 
 import {
   motion,
+  AnimatePresence,
   useMotionTemplate,
   useMotionValue,
   useSpring,
@@ -21,6 +22,8 @@ import ParticleField, {
 } from "@/components/three/ParticleField";
 import { cn, getExperienceLabel } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { useTheme } from "next-themes";
+import { THEMES, type ThemeId } from "@/components/theme/ThemeProvider";
 
 const shellVariants: Variants = {
   hidden: { opacity: 0 },
@@ -167,12 +170,12 @@ function MaskedName({ text, startDelay }: { text: string; startDelay: number }) 
     setMaskPos({ x: -200, y: -200 });
   }, []);
 
-  const baseClass = "text-6xl font-bold leading-[1.1] tracking-tight md:text-7xl lg:text-8xl";
+  const baseClass = "text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl";
 
   return (
     <div
       ref={containerRef}
-      className="relative cursor-none"
+      className="relative"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -326,7 +329,7 @@ function TypingRole({ startDelay }: { startDelay: number }) {
   }, [startDelay]);
 
   return (
-    <span className="inline-flex items-baseline text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+    <span className="inline-flex items-baseline text-lg font-semibold tracking-tight text-foreground sm:text-2xl md:text-3xl">
       <span className="text-accent-cyan" aria-hidden>
         {"› "}
       </span>
@@ -341,7 +344,94 @@ function TypingRole({ startDelay }: { startDelay: number }) {
   );
 }
 
+function HeroThemeLogo({ id }: { id: ThemeId }) {
+  switch (id) {
+    case "cosmic":
+      return (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+          <circle cx="12" cy="12" r="4" fill="#bf5af2" />
+          <path d="M12 2v3m0 14v3M4.93 4.93l2.12 2.12m9.9 9.9l2.12 2.12M2 12h3m14 0h3M4.93 19.07l2.12-2.12m9.9-9.9l2.12-2.12" stroke="#0a84ff" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="12" cy="12" r="8" stroke="url(#hero-ai-grad)" strokeWidth="1" strokeDasharray="2 3" />
+          <defs><linearGradient id="hero-ai-grad" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#0a84ff" /><stop offset="1" stopColor="#bf5af2" /></linearGradient></defs>
+        </svg>
+      );
+    case "macos":
+      return (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.81-1.31.05-2.31-1.32-3.15-2.55C4.22 16.86 3 12.87 4.74 10.18c.87-1.33 2.41-2.17 4.06-2.19 1.29-.02 2.51.87 3.29.87.79 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.27-2.15 3.78.03 3 2.63 4 2.65 4.01-.03.07-.41 1.43-1.33 2.78zM15.42 3.5c.74-.9 1.25-2.14 1.11-3.38-1.07.04-2.37.72-3.14 1.62-.69.8-1.29 2.08-1.13 3.3 1.2.09 2.42-.61 3.16-1.54z" fill="#f5f5f7" />
+        </svg>
+      );
+    case "spotify":
+      return (
+        <svg viewBox="0 0 24 24" className="h-5 w-5">
+          <circle cx="12" cy="12" r="10" fill="#1db954" />
+          <path d="M16.5 8.5c-2.7-1.2-7-.8-7-.8s-.3 0-.3.3.3.3.3.3 3.8-.3 6.3.8c.2.1.4 0 .5-.2s0-.4-.2-.5zm-.5 2.3c-2.3-1-6-.7-6-.7s-.2 0-.2.2.2.3.2.3 3.3-.3 5.5.7c.2.1.3 0 .4-.2.1-.1 0-.3-.1-.3zm-.7 2.2c-2-.8-5-.5-5-.5s-.2 0-.2.2.2.2.2.2 2.7-.2 4.6.5c.2.1.3 0 .3-.1.1-.2 0-.3-.1-.3z" fill="white" />
+        </svg>
+      );
+    case "agentic":
+      return (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+          <rect x="2" y="3" width="20" height="18" rx="3" stroke="#05ce91" strokeWidth="1.5" />
+          <path d="M6 9l3 3-3 3" stroke="#05ce91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 15h5" stroke="#ff9d00" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "netflix":
+      return (
+        <svg viewBox="0 0 24 24" className="h-5 w-5">
+          <path d="M5 2h4.5l5 14.5V2H19v20h-4.5l-5-14.5V22H5V2z" fill="#e50914" />
+        </svg>
+      );
+  }
+}
+
+function ThemePickerPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { setTheme } = useTheme();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open, onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, scale: 0.9, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 10 }}
+          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute bottom-full left-1/2 z-[200] mb-3 -translate-x-1/2 w-56 overflow-hidden rounded-2xl border border-glass-border bg-background/95 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
+        >
+          <div className="p-3">
+            <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-muted">
+              Choose a Theme
+            </p>
+            {THEMES.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => { setTheme(t.id); onClose(); }}
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-muted transition-colors hover:bg-glass-hover hover:text-foreground"
+              >
+                <HeroThemeLogo id={t.id} />
+                <span>{t.label}</span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Hero() {
+  const [themePopupOpen, setThemePopupOpen] = useState(false);
   const particleMouseRef = useRef({ x: 0, y: 0 }) as ParticleMouseRef;
 
   const spotX = useMotionValue(0);
@@ -425,15 +515,15 @@ export default function Hero() {
       />
 
       <motion.div
-        className="relative z-[4] flex min-h-[100dvh] flex-1 flex-col section-padding pb-8 pt-20 md:pb-10 md:pt-24"
+        className="relative z-[4] flex min-h-[100dvh] flex-1 flex-col section-padding pb-6 pt-20 sm:pb-8 md:pb-10 md:pt-24"
         variants={shellVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-10 lg:flex-row lg:items-center lg:gap-16 xl:gap-20">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 sm:gap-10 lg:flex-row lg:items-center lg:gap-16 xl:gap-20">
           {/* Caricature sticker + floating info cards */}
           <motion.div
-            className="relative mx-auto flex w-full max-w-[min(100%,500px)] shrink-0 items-start justify-center lg:order-2 lg:mx-0 lg:max-w-none lg:flex-1 lg:justify-center lg:-mt-56"
+            className="relative mx-auto flex w-full max-w-[min(80%,360px)] shrink-0 items-start justify-center sm:max-w-[min(100%,500px)] lg:order-2 lg:mx-0 lg:max-w-none lg:flex-1 lg:justify-center lg:-mt-32"
             variants={fadeUpBlur}
             initial="hidden"
             animate="visible"
@@ -452,7 +542,7 @@ export default function Hero() {
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Image
-                  src="/NiddhiSachdeo/images/niddhi-caricature.png"
+                  src="/images/niddhi-caricature.png"
                   width={480}
                   height={480}
                   alt="Niddhi Sachdeo caricature"
@@ -498,12 +588,12 @@ export default function Hero() {
               variants={columnStagger}
               initial="hidden"
               animate="visible"
-              className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center"
+              className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
             >
               <motion.div variants={fadeUp}>
                 <MagneticButton strength={0.4}>
                   <a
-                    href="/NiddhiSachdeo/Niddhi_Sachdeo_Resume.pdf"
+                    href="/Niddhi_Sachdeo_2026.docx"
                     download
                     className={cn(
                       "inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white",
@@ -557,17 +647,18 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
+
           </motion.div>
         </div>
 
         {/* Stats strip */}
         <motion.div
-          className="glass mx-auto mt-auto w-full max-w-7xl rounded-2xl border border-glass-border px-4 py-3 md:px-6 md:py-4"
+          className="glass mx-auto mt-auto w-full max-w-7xl rounded-xl border border-glass-border px-3 py-2.5 sm:rounded-2xl sm:px-4 sm:py-3 md:px-6 md:py-4"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-3 text-xs font-medium text-muted sm:text-sm md:flex-nowrap md:justify-between md:text-left">
+          <div className="grid grid-cols-2 gap-x-2 gap-y-2 text-[11px] font-medium text-muted sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-2 sm:gap-y-3 sm:text-sm md:flex-nowrap md:justify-between md:text-left">
             {stats.map(({ icon, text }, i) => (
               <Fragment key={text}>
                 <motion.span
@@ -617,6 +708,33 @@ export default function Hero() {
           />
         </motion.span>
       </motion.a>
+
+      {/* Theme picker — bottom right */}
+      <motion.div
+        className="pointer-events-auto absolute bottom-5 right-5 z-[5] sm:bottom-7 sm:right-8"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, duration: 0.5 }}
+      >
+        <div className="relative">
+          <button
+            onClick={() => setThemePopupOpen((v) => !v)}
+            className="group flex items-center gap-2.5 rounded-xl border border-glass-border bg-glass/80 px-3 py-2 backdrop-blur-xl transition-all hover:border-accent-purple/40 hover:shadow-[0_0_20px_rgba(191,90,242,0.2)]"
+          >
+            <Image
+              src="/images/theme-icon.png"
+              alt="Themes"
+              width={28}
+              height={28}
+              className="h-7 w-7 rounded-md object-contain transition-transform group-hover:scale-110"
+            />
+            <span className="text-[11px] font-medium leading-tight text-foreground/70 group-hover:text-foreground sm:text-xs">
+              Try different themes
+            </span>
+          </button>
+          <ThemePickerPopup open={themePopupOpen} onClose={() => setThemePopupOpen(false)} />
+        </div>
+      </motion.div>
     </section>
   );
 }

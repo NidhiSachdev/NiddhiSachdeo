@@ -11,7 +11,7 @@ export default function GameButton() {
     <>
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 right-40 z-[9999] flex items-center gap-2 rounded-full border border-glass-border bg-glass/90 px-4 py-3 text-sm shadow-lg backdrop-blur-md"
+        className="fixed bottom-16 right-4 z-[9999] flex items-center gap-1.5 rounded-full border border-glass-border bg-glass/90 px-3 py-2 text-xs shadow-lg backdrop-blur-md sm:bottom-5 sm:right-40 sm:gap-2 sm:px-4 sm:py-3 sm:text-sm"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         title="Games"

@@ -160,7 +160,7 @@ function TimelineStrip() {
       <div className="overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]">
         <div
           className={cn(
-            "noise animated-grid glow-border glass relative min-w-max rounded-2xl border border-glass-border px-6 py-10 sm:px-10"
+            "noise animated-grid glow-border glass relative min-w-max rounded-2xl border border-glass-border px-4 py-6 sm:px-6 sm:py-10 md:px-10"
           )}
         >
           <div className="flex items-start">
@@ -278,20 +278,20 @@ export function Experience() {
             transition: { duration: 0.35, ease: easeCurve },
           }}
           className={cn(
-            "noise animated-grid glow-border glass glass-hover relative overflow-hidden rounded-3xl p-8 sm:p-10 lg:p-12",
+            "noise animated-grid glow-border glass glass-hover relative overflow-hidden rounded-2xl p-5 sm:rounded-3xl sm:p-8 md:p-10 lg:p-12",
             "transition-shadow duration-500 hover:shadow-[0_28px_90px_rgba(10,132,255,0.14)] hover:glow-sky"
           )}
         >
-          <div className="relative z-[2] flex flex-col gap-8 lg:flex-row lg:gap-12">
+          <div className="relative z-[2] flex flex-col gap-6 sm:gap-8 lg:flex-row lg:gap-12">
             <div className="lg:w-[220px] lg:shrink-0">
               <motion.div
-                className="flex aspect-square max-w-[200px] items-center justify-center rounded-2xl border border-glass-border bg-glass/80 p-6 backdrop-blur-md lg:max-w-none"
+                className="flex aspect-square max-w-[140px] items-center justify-center rounded-2xl border border-glass-border bg-glass/80 p-4 backdrop-blur-md sm:max-w-[200px] sm:p-6 lg:max-w-none"
                 initial={{ opacity: 0, scale: 0.92 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: easeCurve }}
               >
-                <span className="text-gradient-cyan select-none text-4xl font-black tracking-tighter sm:text-5xl">
+                <span className="text-gradient-cyan select-none text-3xl font-black tracking-tighter sm:text-4xl md:text-5xl">
                   AMDOCS
                 </span>
               </motion.div>
@@ -299,7 +299,7 @@ export function Experience() {
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-end gap-3 gap-y-2">
-                <h3 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
+                <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-tight">
                   {AMDOCS.role}
                 </h3>
               </div>

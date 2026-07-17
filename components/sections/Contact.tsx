@@ -152,7 +152,7 @@ export function Contact() {
         </motion.p>
 
         <motion.div
-          className="mb-10 grid gap-4 sm:grid-cols-3"
+          className="mb-8 grid gap-3 sm:mb-10 sm:grid-cols-3 sm:gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
@@ -174,7 +174,7 @@ export function Contact() {
             );
 
             const cardClass = cn(
-              "glow-border rounded-2xl border border-glass-border p-5 text-left",
+              "glow-border rounded-xl border border-glass-border p-4 text-left sm:rounded-2xl sm:p-5",
               "glass glass-hover shadow-[0_16px_48px_rgba(244,63,94,0.06)]",
               card.href && "transition-colors hover:border-rose-400/35"
             );
@@ -209,7 +209,7 @@ export function Contact() {
 
         <motion.div
           className={cn(
-            "glow-border mx-auto mb-14 max-w-xl rounded-3xl border border-glass-border p-8 text-left",
+            "glow-border mx-auto mb-10 max-w-xl rounded-2xl border border-glass-border p-5 text-left sm:mb-14 sm:rounded-3xl sm:p-8",
             "glass glass-hover shadow-[0_24px_80px_rgba(244,63,94,0.08)]"
           )}
           initial={{ opacity: 0, y: 26, scale: 0.98 }}
@@ -218,7 +218,7 @@ export function Contact() {
           transition={{ duration: 0.6, ease: easeCurve, delay: 0.14 }}
         >
           <form
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-4 sm:gap-5"
             action="https://api.web3forms.com/submit"
             method="POST"
           >

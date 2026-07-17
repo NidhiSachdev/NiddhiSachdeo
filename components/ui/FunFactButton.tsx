@@ -40,7 +40,7 @@ export default function FunFactButton() {
     <>
       <motion.button
         onClick={showNewFact}
-        className="fixed bottom-5 right-5 z-[9999] flex items-center gap-2 rounded-full border border-glass-border bg-glass/90 px-4 py-3 text-sm shadow-lg backdrop-blur-md"
+        className="fixed bottom-4 right-4 z-[9999] flex items-center gap-1.5 rounded-full border border-glass-border bg-glass/90 px-3 py-2 text-xs shadow-lg backdrop-blur-md sm:bottom-5 sm:right-5 sm:gap-2 sm:px-4 sm:py-3 sm:text-sm"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         title="Fun Fact!"
@@ -52,7 +52,7 @@ export default function FunFactButton() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-20 right-5 z-[9999] w-[min(320px,85vw)] rounded-2xl border border-glass-border bg-background/95 p-5 shadow-2xl backdrop-blur-xl"
+            className="fixed bottom-14 right-4 z-[9999] w-[min(320px,85vw)] rounded-2xl border border-glass-border bg-background/95 p-4 shadow-2xl backdrop-blur-xl sm:bottom-20 sm:right-5 sm:p-5"
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}

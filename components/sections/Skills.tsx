@@ -106,7 +106,7 @@ function SkillBox({ group, index }: { group: SkillGroup; index: number }) {
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -5, transition: { duration: 0.25 } }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-glass-border bg-glass/40 p-6",
+        "group relative overflow-hidden rounded-2xl border border-glass-border bg-glass/40 p-4 sm:p-6",
         "backdrop-blur-md transition-shadow duration-300",
       )}
       style={{
@@ -130,13 +130,13 @@ function SkillBox({ group, index }: { group: SkillGroup; index: number }) {
             {group.label}
           </h3>
         </div>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-2">
           {group.skills.map((skill) => (
             <span
               key={skill.name}
               className={cn(
-                "inline-flex items-center gap-2 rounded-lg border border-glass-border bg-white/[0.04] px-3.5 py-2",
-                "text-sm font-medium text-foreground/90 transition-all duration-200",
+                "inline-flex items-center gap-1.5 rounded-lg border border-glass-border bg-white/[0.04] px-2.5 py-1.5 sm:gap-2 sm:px-3.5 sm:py-2",
+                "text-xs font-medium text-foreground/90 transition-all duration-200 sm:text-sm",
                 "hover:bg-white/[0.08] hover:text-foreground",
               )}
               style={{
@@ -206,7 +206,7 @@ export function Skills() {
           </span>
         </motion.h2>
 
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
           {skillGroups.map((group, i) => (
             <SkillBox key={group.label} group={group} index={i} />
           ))}

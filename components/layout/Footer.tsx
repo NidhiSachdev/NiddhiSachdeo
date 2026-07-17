@@ -43,7 +43,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative mt-auto w-full px-4 pb-10 pt-16 sm:px-6 lg:px-8">
+    <footer className="relative mt-auto w-full px-3 pb-6 pt-10 sm:px-4 sm:pb-10 sm:pt-16 lg:px-8">
       {/* Gradient divider */}
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
@@ -58,7 +58,7 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-        className="glass glass-hover mx-auto max-w-4xl rounded-2xl border border-glass-border px-6 py-10 shadow-[0_0_60px_rgba(10,132,255,0.06)]"
+        className="glass glass-hover mx-auto max-w-4xl rounded-xl border border-glass-border px-4 py-6 shadow-[0_0_60px_rgba(10,132,255,0.06)] sm:rounded-2xl sm:px-6 sm:py-10"
       >
         <div className="flex flex-col items-center gap-8 text-center md:flex-row md:justify-between md:text-left">
           <div className="space-y-3">

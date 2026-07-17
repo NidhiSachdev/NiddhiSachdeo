@@ -16,6 +16,7 @@ import {
   type MouseEvent,
 } from "react";
 import { cn } from "@/lib/utils";
+import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 
 const NAV_SECTIONS = [
   { id: "about", label: "About" },
@@ -260,6 +261,15 @@ export default function Navbar({ activeSection: controlledActive, onAIClick }: N
             ))}
           </nav>
 
+          <div className="flex items-center gap-2">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.35, delay: 0.4 }}
+            >
+              <ThemeSwitcher />
+            </motion.div>
+
           <motion.button
             type="button"
             className={cn(
@@ -294,6 +304,7 @@ export default function Navbar({ activeSection: controlledActive, onAIClick }: N
               className="block h-0.5 w-5 rounded-full bg-foreground"
             />
           </motion.button>
+          </div>
         </motion.div>
       </motion.header>
 
@@ -351,6 +362,15 @@ export default function Navbar({ activeSection: controlledActive, onAIClick }: N
                   </Link>
                 </motion.div>
               ))}
+              <motion.div
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 * NAV_SECTIONS.length, duration: 0.35 }}
+                className="mt-4 border-t border-glass-border pt-4"
+              >
+                <p className="mb-2 px-4 text-xs font-semibold uppercase tracking-widest text-muted">Theme</p>
+                <ThemeSwitcher />
+              </motion.div>
             </motion.nav>
           </>
         )}

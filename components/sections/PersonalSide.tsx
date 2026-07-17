@@ -102,7 +102,7 @@ export function PersonalSide() {
 
         {/* Interests grid */}
         <motion.div
-          className="mb-16 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6"
+          className="mb-10 grid grid-cols-2 gap-3 sm:mb-16 sm:gap-4 lg:grid-cols-4 lg:gap-6"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -114,7 +114,7 @@ export function PersonalSide() {
               variants={itemVariants}
               whileHover={{ scale: 1.04, y: -6 }}
               className={cn(
-                "group glow-border relative overflow-hidden rounded-2xl p-6 text-center",
+                "group glow-border relative overflow-hidden rounded-xl p-4 text-center sm:rounded-2xl sm:p-6",
                 "glass glass-hover",
                 "transition-shadow duration-300 hover:glow-pink",
               )}
@@ -126,7 +126,7 @@ export function PersonalSide() {
                 )}
               />
               <motion.span
-                className="relative z-[2] mb-3 block text-5xl"
+                className="relative z-[2] mb-2 block text-3xl sm:mb-3 sm:text-5xl"
                 animate={{ y: [0, -6, 0] }}
                 transition={{
                   duration: 3 + idx * 0.4,
@@ -137,7 +137,7 @@ export function PersonalSide() {
               >
                 {item.icon}
               </motion.span>
-              <h3 className="relative z-[2] text-base font-semibold text-foreground">
+              <h3 className="relative z-[2] text-sm font-semibold text-foreground sm:text-base">
                 {item.label}
               </h3>
             </motion.div>
@@ -152,7 +152,7 @@ export function PersonalSide() {
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap gap-3"
+          className="flex flex-wrap gap-2 sm:gap-3"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -164,8 +164,8 @@ export function PersonalSide() {
               variants={itemVariants}
               whileHover={{ scale: 1.06, y: -3 }}
               className={cn(
-                "glass glass-hover glow-border cursor-default rounded-full px-5 py-2.5",
-                "text-sm font-medium text-foreground",
+                "glass glass-hover glow-border cursor-default rounded-full px-3.5 py-2 sm:px-5 sm:py-2.5",
+                "text-xs font-medium text-foreground sm:text-sm",
                 "transition-shadow duration-300 hover:glow-pink",
               )}
               style={{

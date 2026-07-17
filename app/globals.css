@@ -36,6 +36,7 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;
+    transition: background-color 0.5s ease, color 0.4s ease;
   }
 
   ::selection {
@@ -208,10 +209,10 @@
   }
 
   .section-padding {
-    padding-left: clamp(1.5rem, 5vw, 6rem);
-    padding-right: clamp(1.5rem, 5vw, 6rem);
-    padding-top: 8rem;
-    padding-bottom: 8rem;
+    padding-left: clamp(1rem, 5vw, 6rem);
+    padding-right: clamp(1rem, 5vw, 6rem);
+    padding-top: clamp(3.5rem, 8vw, 8rem);
+    padding-bottom: clamp(3.5rem, 8vw, 8rem);
   }
 
   .floating-section {
@@ -223,17 +224,17 @@
 
   .floating-section-inset {
     position: relative;
-    margin-left: clamp(0.5rem, 2vw, 2rem);
-    margin-right: clamp(0.5rem, 2vw, 2rem);
-    margin-bottom: 2rem;
-    border-radius: 1.5rem;
+    margin-left: clamp(0.25rem, 1.5vw, 2rem);
+    margin-right: clamp(0.25rem, 1.5vw, 2rem);
+    margin-bottom: clamp(0.75rem, 2vw, 2rem);
+    border-radius: clamp(0.75rem, 2vw, 1.5rem);
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
   }
 
   .section-heading {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(1.75rem, 5vw, 4.5rem);
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.1;
@@ -314,4 +315,80 @@
 
 .animate-marquee-cert {
   animation: marquee 30s linear infinite;
+}
+
+/* ===== THEME OVERRIDES ===== */
+
+[data-theme="macos"] {
+  --color-background: #1e1e2e;
+  --color-foreground: #f5f5f7;
+  --color-muted: #86868b;
+  --color-accent-blue: #007aff;
+  --color-accent-purple: #5856d6;
+  --color-accent-cyan: #5ac8fa;
+  --color-glass: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.12);
+  --color-glass-hover: rgba(255, 255, 255, 0.14);
+  --color-glow-blue: rgba(0, 122, 255, 0.4);
+  --color-glow-purple: rgba(88, 86, 214, 0.35);
+}
+
+[data-theme="macos"] ::selection {
+  background: rgba(0, 122, 255, 0.35);
+}
+
+[data-theme="spotify"] {
+  --color-background: #121212;
+  --color-foreground: #ffffff;
+  --color-muted: #b3b3b3;
+  --color-accent-blue: #1ed760;
+  --color-accent-purple: #1ed760;
+  --color-accent-cyan: #1ed760;
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass-border: rgba(255, 255, 255, 0.06);
+  --color-glass-hover: rgba(255, 255, 255, 0.08);
+  --color-glow-blue: rgba(30, 215, 96, 0.35);
+  --color-glow-purple: rgba(30, 215, 96, 0.25);
+}
+
+[data-theme="spotify"] ::selection {
+  background: rgba(30, 215, 96, 0.3);
+}
+
+[data-theme="agentic"] {
+  --color-background: #1d2a35;
+  --color-foreground: #cbd5e1;
+  --color-muted: #64748b;
+  --color-accent-blue: #05ce91;
+  --color-accent-purple: #ff9d00;
+  --color-accent-cyan: #05ce91;
+  --color-glass: rgba(5, 206, 145, 0.04);
+  --color-glass-border: rgba(5, 206, 145, 0.12);
+  --color-glass-hover: rgba(5, 206, 145, 0.1);
+  --color-glow-blue: rgba(5, 206, 145, 0.4);
+  --color-glow-purple: rgba(255, 157, 0, 0.35);
+  --font-sans: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+}
+
+[data-theme="agentic"] ::selection {
+  background: rgba(5, 206, 145, 0.3);
+  color: #000;
+}
+
+[data-theme="netflix"] {
+  --color-background: #141414;
+  --color-foreground: #ffffff;
+  --color-muted: #b3b3b3;
+  --color-accent-blue: #e50914;
+  --color-accent-purple: #e50914;
+  --color-accent-cyan: #46d369;
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-hover: rgba(229, 9, 20, 0.12);
+  --color-glow-blue: rgba(229, 9, 20, 0.4);
+  --color-glow-purple: rgba(229, 9, 20, 0.3);
+}
+
+[data-theme="netflix"] ::selection {
+  background: rgba(229, 9, 20, 0.4);
 }

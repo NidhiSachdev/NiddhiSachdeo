@@ -251,15 +251,15 @@ function ProjectCard({ project }: { project: Project }) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={handleLeave}
       >
-        <div className="relative z-[2] flex flex-1 flex-col gap-3 p-5 md:p-6">
+          <div className="relative z-[2] flex flex-1 flex-col gap-3 p-4 sm:p-5 md:p-6">
           <h3
-            className="text-lg font-bold leading-snug text-foreground md:text-xl"
+            className="text-base font-bold leading-snug text-foreground sm:text-lg md:text-xl"
             style={{ color: hovered ? project.gradientFrom : undefined }}
           >
             {project.title}
           </h3>
 
-          <p className="text-sm leading-relaxed text-muted md:text-[0.95rem]">
+          <p className="text-xs leading-relaxed text-muted sm:text-sm md:text-[0.95rem]">
             {project.description}
           </p>
 

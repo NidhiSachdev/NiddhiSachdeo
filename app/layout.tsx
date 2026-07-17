@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Niddhi Sachdeo | Software Developer",
@@ -59,16 +60,9 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
-        <div
-          className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/NiddhiSachdeo/images/bg-starfield.jpg')" }}
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none fixed inset-0 -z-[19] bg-background/75 backdrop-blur-[2px]"
-          aria-hidden
-        />
-        <ClientShell>{children}</ClientShell>
+        <ThemeProvider>
+          <ClientShell>{children}</ClientShell>
+        </ThemeProvider>
       </body>
     </html>
   );

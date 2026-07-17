@@ -141,9 +141,9 @@ export function About() {
         </motion.h2>
 
         {/* Two columns */}
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,400px)_1fr] lg:items-start lg:gap-14">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,400px)_1fr] lg:items-start lg:gap-14">
           {/* Photo column */}
-          <motion.div variants={itemVariants} className="relative mx-auto w-full max-w-[400px] lg:mx-0">
+          <motion.div variants={itemVariants} className="relative mx-auto w-full max-w-[320px] sm:max-w-[400px] lg:mx-0">
             <motion.div
               className="relative overflow-visible rounded-2xl"
               animate={{
@@ -158,7 +158,7 @@ export function About() {
             >
               <div className="relative overflow-hidden rounded-2xl bg-background">
                 <Image
-                  src="/NiddhiSachdeo/images/about.jpg"
+                  src="/images/about.jpg"
                   alt="Niddhi working"
                   width={400}
                   height={480}
@@ -213,7 +213,7 @@ export function About() {
             </div>
 
             <motion.ul
-              className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-4 lg:grid-cols-3"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
@@ -270,7 +270,7 @@ export function About() {
           </motion.h3>
 
           <motion.ul
-            className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6"
+            className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-6"
             variants={containerVariants}
           >
             {specialties.map((card) => (

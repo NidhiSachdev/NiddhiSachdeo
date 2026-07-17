@@ -198,16 +198,16 @@ export function Education() {
               transition={{ duration: 0.55, ease: easeCurve }}
               whileHover={{ y: -4 }}
               className={cn(
-                "glow-border relative rounded-3xl border border-glass-border p-6 md:p-8",
+                "glow-border relative rounded-2xl border border-glass-border p-4 sm:rounded-3xl sm:p-6 md:p-8",
                 "glass glass-hover",
                 edu.cyanAccent &&
                   "shadow-[0_0_40px_rgba(56,189,248,0.12)] ring-1 ring-sky-400/20"
               )}
             >
-              <div className="mb-4 flex items-start gap-4">
+              <div className="mb-3 flex items-start gap-3 sm:mb-4 sm:gap-4">
                 <span
                   className={cn(
-                    "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-glass-border bg-glass/80 text-2xl backdrop-blur-md",
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-glass-border bg-glass/80 text-xl backdrop-blur-md sm:h-12 sm:w-12 sm:rounded-2xl sm:text-2xl",
                     edu.cyanAccent && "border-sky-400/30 text-sky-400"
                   )}
                   aria-hidden
@@ -215,7 +215,7 @@ export function Education() {
                   {edu.icon}
                 </span>
                 <div>
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground md:text-xl">
+                  <h3 className="text-base font-semibold tracking-tight text-foreground sm:text-lg md:text-xl">
                     {edu.title}
                   </h3>
                   <p
