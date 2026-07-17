@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { getExperienceLabel } from "@/lib/utils";
+import { getExperienceLabel, assetPath } from "@/lib/utils";
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 
 type WindowId = "finder" | "about" | "experience" | "projects" | "skills" | "contact";
@@ -26,12 +26,12 @@ const INITIAL_WINDOWS: WindowState[] = [
 ];
 
 const DOCK_APPS: { id: WindowId; title: string; img: string }[] = [
-  { id: "finder", title: "Finder", img: "/images/macos-icons/finder.png" },
-  { id: "about", title: "About Me", img: "/images/macos-icons/photobooth.png" },
-  { id: "experience", title: "Experience", img: "/images/macos-icons/safari.png" },
-  { id: "projects", title: "Projects", img: "/images/macos-icons/settings.png" },
-  { id: "skills", title: "Skills", img: "/images/macos-icons/terminal.png" },
-  { id: "contact", title: "Contact", img: "/images/macos-icons/facetime.png" },
+  { id: "finder", title: "Finder", img: assetPath("/images/macos-icons/finder.png") },
+  { id: "about", title: "About Me", img: assetPath("/images/macos-icons/photobooth.png") },
+  { id: "experience", title: "Experience", img: assetPath("/images/macos-icons/safari.png") },
+  { id: "projects", title: "Projects", img: assetPath("/images/macos-icons/settings.png") },
+  { id: "skills", title: "Skills", img: assetPath("/images/macos-icons/terminal.png") },
+  { id: "contact", title: "Contact", img: assetPath("/images/macos-icons/facetime.png") },
 ];
 
 /* ───────────────── TOP MENU BAR ───────────────── */
@@ -229,11 +229,11 @@ function AppWindow({ win, onClose, onMinimize, onFocus, children }: {
 /* ───────────────── FINDER CONTENT (launcher) ───────────────── */
 function FinderContent({ onOpenApp }: { onOpenApp: (id: WindowId) => void }) {
   const apps: { id: WindowId; icon: string; label: string; color: string }[] = [
-    { id: "about", icon: "/images/macos-icons/photobooth.png", label: "About Me", color: "#8E8E93" },
-    { id: "experience", icon: "/images/macos-icons/safari.png", label: "Experience", color: "#007AFF" },
-    { id: "projects", icon: "/images/macos-icons/settings.png", label: "Projects", color: "#636366" },
-    { id: "skills", icon: "/images/macos-icons/terminal.png", label: "Skills", color: "#30D158" },
-    { id: "contact", icon: "/images/macos-icons/facetime.png", label: "Contact", color: "#34D058" },
+    { id: "about", icon: assetPath("/images/macos-icons/photobooth.png"), label: "About Me", color: "#8E8E93" },
+    { id: "experience", icon: assetPath("/images/macos-icons/safari.png"), label: "Experience", color: "#007AFF" },
+    { id: "projects", icon: assetPath("/images/macos-icons/settings.png"), label: "Projects", color: "#636366" },
+    { id: "skills", icon: assetPath("/images/macos-icons/terminal.png"), label: "Skills", color: "#30D158" },
+    { id: "contact", icon: assetPath("/images/macos-icons/facetime.png"), label: "Contact", color: "#34D058" },
   ];
 
   return (
@@ -528,7 +528,7 @@ function ContactContent() {
 
       {/* Resume download */}
       <a
-        href="/Niddhi_Sachdeo_2026.docx"
+        href={assetPath("/Niddhi_Sachdeo_2026.docx")}
         download
         className="mt-8 inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-5 py-2 text-[12px] font-medium text-white/80 transition-colors hover:bg-white/[0.12]"
       >

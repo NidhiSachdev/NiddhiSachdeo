@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[837],{837:(e,a,n)=>{n.r(a),n.d(a,{default:()=>s});var r=n(5155);function s(){return(0,r.jsx)("div",{className:"pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat",style:{backgroundImage:"url('/images/macos-wallpaper.jpg')"},"aria-hidden":!0})}}}]);

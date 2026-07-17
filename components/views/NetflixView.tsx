@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { getExperienceLabel } from "@/lib/utils";
+import { getExperienceLabel, assetPath } from "@/lib/utils";
 
 const EXPERIENCE = [
   {
@@ -176,7 +176,7 @@ function NetflixIntro({ onComplete }: { onComplete: () => void }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <audio ref={audioRef} src="/netflix-sound.webm" preload="auto" />
+      <audio ref={audioRef} src={assetPath("/netflix-sound.webm")} preload="auto" />
 
       <motion.div className="relative flex items-center justify-center">
         {/* The NS — starts zoomed in very close (like Netflix N filling screen) then pulls back */}
@@ -243,7 +243,7 @@ export default function NetflixView() {
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a
-              href="/Niddhi_Sachdeo_2026.docx"
+              href={assetPath("/Niddhi_Sachdeo_2026.docx")}
               download
               className="inline-flex items-center gap-2 rounded bg-white px-7 py-3 text-base font-bold text-black transition-all hover:bg-white/75"
             >

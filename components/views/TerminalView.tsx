@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
+import { assetPath } from "@/lib/utils";
 
 const ASCII_ART = `
  _   _ _     _     _ _     _   ____             _         _            
@@ -159,7 +160,7 @@ function runCommand(cmd: string): OutputLine[] {
 
     case "resume":
       if (typeof window !== "undefined") {
-        window.open("/Niddhi_Sachdeo_2026.docx", "_blank");
+        window.open(assetPath("/Niddhi_Sachdeo_2026.docx"), "_blank");
       }
       return [{ type: "output", content: "  Opening resume in a new tab..." }];
 

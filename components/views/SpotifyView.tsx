@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getExperienceLabel } from "@/lib/utils";
+import { getExperienceLabel, assetPath } from "@/lib/utils";
 
 const EXPERIENCE = {
   role: "Software Developer",
@@ -175,7 +175,7 @@ export default function SpotifyView() {
                 <PlayIcon className="h-4 w-4 text-black ml-0.5" />
               </button>
               <ShuffleIcon className="h-5 w-5 text-[#b3b3b3] hover:text-white transition-colors cursor-pointer" />
-              <a href="/Niddhi_Sachdeo_2026.docx" download className="text-[#b3b3b3] hover:text-white transition-colors">
+              <a href={assetPath("/Niddhi_Sachdeo_2026.docx")} download className="text-[#b3b3b3] hover:text-white transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -322,7 +322,7 @@ export default function SpotifyView() {
               LinkedIn
             </a>
             <a
-              href="/Niddhi_Sachdeo_2026.docx"
+              href={assetPath("/Niddhi_Sachdeo_2026.docx")}
               download
               className="inline-flex items-center gap-2 rounded-full border border-[#727272] px-5 py-2.5 text-sm font-bold text-white hover:border-[#1DB954] hover:text-[#1DB954] hover:scale-105 transition-all"
             >

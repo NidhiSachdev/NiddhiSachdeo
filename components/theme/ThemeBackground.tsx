@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { assetPath } from "@/lib/utils";
 
 const MacOSBackground = dynamic(
   () => import("./backgrounds/MacOSBackground"),
@@ -22,7 +23,7 @@ function CosmicBackground() {
     <>
       <div
         className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/bg-starfield.jpg')" }}
+        style={{ backgroundImage: `url('${assetPath("/images/bg-starfield.jpg")}')` }}
         aria-hidden
       />
       <div

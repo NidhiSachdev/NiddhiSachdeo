@@ -20,7 +20,7 @@ import {
 import ParticleField, {
   type ParticleMouseRef,
 } from "@/components/three/ParticleField";
-import { cn, getExperienceLabel } from "@/lib/utils";
+import { cn, getExperienceLabel, assetPath } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { useTheme } from "next-themes";
 import { THEMES, type ThemeId } from "@/components/theme/ThemeProvider";
@@ -593,7 +593,7 @@ export default function Hero() {
               <motion.div variants={fadeUp}>
                 <MagneticButton strength={0.4}>
                   <a
-                    href="/Niddhi_Sachdeo_2026.docx"
+                    href={assetPath("/Niddhi_Sachdeo_2026.docx")}
                     download
                     className={cn(
                       "inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white",
