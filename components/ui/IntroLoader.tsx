@@ -1,206 +1,152 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
+import { THEMES } from "@/components/theme/ThemeProvider";
+import { assetPath } from "@/lib/utils";
 
-const MESSAGES = [
-  "she is slaying...",
-  "serving looks, one kilobyte at a time",
-  "your fave dev said 'i woke up like this'",
-  "no cap this is gonna go crazy",
-  "she understood the assignment. wait for it.",
-  "the audacity, the talent, the drip",
-  "it's giving genius with a side of slay",
-  "touch grass? she builds forests",
-  "almost done cooking... chef's kiss incoming",
-  "ok bestie, clear your schedule for this",
-];
-
-const DURATION = 10000;
+const DURATION = 8000;
 
 function ease(t: number) {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
 
 const LOADER_CSS = `
-/* Fixed full-screen shell */
-.intro-lw{position:fixed;inset:0;z-index:99999;background:#080810;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;transition:opacity 0.6s ease-in-out;}
-.intro-lw.fade-out{opacity:0;pointer-events:none;}
+.il-wrap{position:fixed;inset:0;z-index:99999;background:#06050e;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;transition:opacity 0.8s ease;overflow:hidden;}
+.il-wrap.fade-out{opacity:0;pointer-events:none;}
 
-/* Background layers — fixed so they don't affect layout */
-.intro-grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(139,92,246,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.04) 1px,transparent 1px);background-size:36px 36px;z-index:0;pointer-events:none;}
-.intro-star{position:fixed;border-radius:50%;background:#fff;animation:intro-twinkle ease-in-out infinite;z-index:0;pointer-events:none;}
-@keyframes intro-twinkle{0%,100%{opacity:0.1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.4);}}
-.intro-orb{position:fixed;border-radius:50%;z-index:0;animation:intro-orbDrift ease-in-out infinite;pointer-events:none;}
-@keyframes intro-orbDrift{0%,100%{transform:translate(0,0);}50%{transform:translate(20px,-20px);}}
+/* Ambient gradient orbs */
+.il-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12;animation:il-drift 20s ease-in-out infinite;}
+.il-orb-1{width:500px;height:500px;background:#7c3aed;top:-15%;left:-10%;animation-delay:0s;}
+.il-orb-2{width:400px;height:400px;background:#0ea5e9;bottom:-10%;right:-8%;animation-delay:-7s;}
+.il-orb-3{width:300px;height:300px;background:#a855f7;top:40%;right:20%;animation-delay:-14s;}
+@keyframes il-drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-20px) scale(1.05);}66%{transform:translate(-20px,15px) scale(0.95);};}
 
-/* Content — uses vh units so it ALWAYS fits the viewport */
-.intro-cl{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:90%;max-width:460px;max-height:96vh;max-height:96dvh;padding:1.5vh 0;box-sizing:border-box;}
+/* Subtle grid */
+.il-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.03) 1px,transparent 1px);background-size:60px 60px;opacity:0.6;}
 
-/* Vibes pill */
-.intro-vibes-pill{display:flex;align-items:center;gap:clamp(4px,1vw,8px);background:rgba(139,92,246,0.12);border:0.5px solid rgba(139,92,246,0.3);border-radius:100px;padding:4px clamp(8px,2vw,14px) 4px clamp(4px,1vw,6px);margin-bottom:clamp(6px,1.5vh,20px);max-width:100%;flex-shrink:0;}
-.intro-vdot{width:clamp(20px,3.5vw,26px);height:clamp(20px,3.5vw,26px);border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,1.5vw,12px);color:#fff;font-weight:700;flex-shrink:0;}
-.intro-vibes-pill span{font-size:clamp(8px,1.4vw,11px);color:rgba(139,92,246,0.9);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* Floating particles */
+.il-particle{position:absolute;width:2px;height:2px;background:#a78bfa;border-radius:50%;opacity:0;animation:il-float 6s ease-in-out infinite;}
+@keyframes il-float{0%{opacity:0;transform:translateY(0);}20%{opacity:0.6;}80%{opacity:0.4;}100%{opacity:0;transform:translateY(-120px);}}
 
-/* Coffee cup — scales with viewport height */
-.intro-coffee-stage{width:clamp(100px,18vh,190px);height:clamp(105px,19vh,200px);position:relative;margin-bottom:clamp(4px,1vh,16px);flex-shrink:1;min-height:0;}
-.intro-coffee-stage svg{width:100%;height:100%;display:block;}
-.intro-cup-shadow{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:clamp(50px,10vh,90px);height:clamp(6px,1vh,14px);background:rgba(80,30,0,0.4);border-radius:50%;filter:blur(5px);animation:intro-shad 3s ease-in-out infinite;}
-@keyframes intro-shad{0%,100%{opacity:0.35;}50%{opacity:0.55;}}
-.intro-cup3d{animation:intro-cupbob 3.2s ease-in-out infinite;display:block;}
-@keyframes intro-cupbob{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-8px) rotate(1.5deg);}}
-.intro-stm{stroke-dasharray:38;stroke-dashoffset:38;animation:intro-steamgo 2.2s ease-in-out infinite;}
-.intro-stm:nth-child(2){animation-delay:0.5s;}
-.intro-stm:nth-child(3){animation-delay:1s;}
-@keyframes intro-steamgo{0%{stroke-dashoffset:38;opacity:0;}25%{opacity:1;}100%{stroke-dashoffset:-38;opacity:0;}}
+/* Content */
+.il-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:520px;padding:0 24px;}
 
-/* Heading */
-.intro-hline{text-align:center;margin-bottom:clamp(2px,0.5vh,6px);flex-shrink:0;}
-.intro-hline h1{font-size:clamp(16px,3vw,30px);font-weight:700;color:#fff;line-height:1.2;letter-spacing:-0.03em;margin:0;}
-.intro-hline h1 .intro-gr{background:linear-gradient(90deg,#a78bfa,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+/* Logo mark */
+.il-logo{width:72px;height:72px;position:relative;margin-bottom:32px;}
+.il-logo-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(167,139,250,0.3);animation:il-spin 8s linear infinite;}
+.il-logo-ring-2{position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(14,165,233,0.2);animation:il-spin 12s linear infinite reverse;}
+.il-logo-center{position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(14,165,233,0.1));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;letter-spacing:0.5px;}
+@keyframes il-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.il-logo-dot{position:absolute;width:6px;height:6px;border-radius:50%;background:#a78bfa;top:-3px;left:50%;margin-left:-3px;box-shadow:0 0 8px #a78bfa;}
+.il-logo-dot-2{position:absolute;width:4px;height:4px;border-radius:50%;background:#0ea5e9;bottom:4px;right:4px;box-shadow:0 0 6px #0ea5e9;}
 
-/* Typing message */
-.intro-tmsg{font-size:clamp(10px,1.6vw,13px);color:rgba(255,255,255,0.4);text-align:center;min-height:14px;margin-bottom:clamp(6px,1.2vh,22px);letter-spacing:0.01em;font-weight:300;padding:0 0.25rem;word-break:break-word;flex-shrink:0;}
-.intro-cur{display:inline-block;width:2px;height:13px;background:#a78bfa;margin-left:2px;vertical-align:middle;animation:intro-blink 0.65s infinite;}
-@keyframes intro-blink{0%,100%{opacity:1;}50%{opacity:0;}}
+/* Title */
+.il-title{font-size:clamp(26px,4vw,38px);font-weight:700;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:8px;}
+.il-title-grad{background:linear-gradient(135deg,#a78bfa,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.il-subtitle{font-size:clamp(13px,1.8vw,15px);color:rgba(255,255,255,0.4);font-weight:400;margin-bottom:40px;line-height:1.5;}
 
-/* Progress bar */
-.intro-progress-wrap{width:100%;margin-bottom:clamp(6px,1vh,16px);flex-shrink:0;}
-.intro-prog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:clamp(3px,0.6vh,10px);}
-.intro-prog-status{font-size:clamp(8px,1.3vw,11px);color:rgba(255,255,255,0.25);letter-spacing:0.1em;text-transform:uppercase;}
-.intro-prog-num{font-size:clamp(18px,3.5vw,32px);font-weight:700;color:#fff;font-variant-numeric:tabular-nums;line-height:1;}
-.intro-track{width:100%;height:3px;background:rgba(255,255,255,0.07);border-radius:100px;position:relative;}
-.intro-fill{height:100%;background:linear-gradient(90deg,#6d28d9,#a78bfa,#f472b6);border-radius:100px;width:0%;transition:width 0.08s linear;position:relative;}
-.intro-glow-dot{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:7px;height:7px;background:#f472b6;border-radius:50%;box-shadow:0 0 6px #f472b6,0 0 14px rgba(244,114,182,0.6);}
-.intro-sub-track{width:100%;height:2px;background:rgba(255,255,255,0.04);border-radius:100px;margin-top:4px;}
-.intro-sub-fill{height:100%;background:rgba(167,139,250,0.3);border-radius:100px;width:0%;transition:width 0.1s linear;}
+/* Progress */
+.il-progress{width:100%;max-width:320px;margin-bottom:32px;}
+.il-prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.il-prog-label{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;}
+.il-prog-pct{font-size:13px;color:rgba(255,255,255,0.6);font-weight:600;font-variant-numeric:tabular-nums;}
+.il-track{width:100%;height:2px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden;}
+.il-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#7c3aed,#a78bfa,#0ea5e9);transition:width 0.1s linear;}
 
-/* Slang tags */
-.intro-slang-wall{display:flex;flex-wrap:wrap;gap:clamp(3px,0.5vw,7px);justify-content:center;margin-top:clamp(4px,1vh,14px);margin-bottom:2px;flex-shrink:1;min-height:0;overflow:hidden;}
-.intro-s-tag{font-size:clamp(7px,1.2vw,11px);padding:clamp(2px,0.4vh,4px) clamp(6px,1vw,13px);border-radius:100px;border:0.5px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.28);letter-spacing:0.04em;font-weight:400;opacity:0;transform:translateY(10px) scale(0.9);transition:opacity 0.4s,transform 0.4s,color 0.4s,border-color 0.4s,background 0.3s;white-space:nowrap;}
-.intro-s-tag.on{opacity:1;transform:translateY(0) scale(1);}
-.intro-s-tag:hover{color:#fff;border-color:rgba(167,139,250,0.5);background:rgba(139,92,246,0.1);cursor:default;}
+/* Status pills */
+.il-status{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px;}
+.il-pill{font-size:11px;padding:5px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);font-weight:400;opacity:0;transform:translateY(8px);transition:all 0.4s ease;}
+.il-pill.on{opacity:1;transform:translateY(0);color:rgba(255,255,255,0.55);border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.05);}
 
-/* Fun cards */
-.intro-fun-strip{display:flex;gap:clamp(4px,0.8vw,10px);justify-content:center;margin-top:clamp(6px,1vh,16px);flex-wrap:wrap;}
-.intro-fun-card{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:8px;padding:clamp(4px,0.6vh,10px) clamp(6px,1vw,14px);display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0;transform:translateY(12px);transition:opacity 0.5s,transform 0.5s;}
-.intro-fun-card.on{opacity:1;transform:translateY(0);}
-.intro-fun-card .fc-ico{font-size:clamp(12px,2vw,20px);line-height:1;}
-.intro-fun-card .fc-lbl{font-size:clamp(6px,1vw,10px);color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;}
-.intro-fun-card .fc-val{font-size:clamp(10px,1.5vw,14px);color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:-0.01em;}
+/* Completion */
+.il-done{opacity:0;transition:opacity 0.6s;margin-top:8px;}
+.il-done.on{opacity:1;}
+.il-done p{font-size:13px;color:rgba(255,255,255,0.4);font-weight:400;}
 
-/* Mood bars */
-.intro-mood-rows{display:flex;flex-direction:column;gap:clamp(2px,0.4vh,6px);width:100%;margin-top:clamp(6px,1vh,18px);opacity:0;transition:opacity 0.6s;}
-.intro-mood-rows.on{opacity:1;}
-.intro-mb-row{display:flex;align-items:center;gap:clamp(4px,0.7vw,8px);}
-.intro-mb-label{font-size:clamp(7px,1.1vw,11px);color:rgba(255,255,255,0.25);letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;width:clamp(48px,9vw,72px);flex-shrink:0;}
-.intro-mb-track{flex:1;height:2px;background:rgba(255,255,255,0.06);border-radius:100px;min-width:0;}
-.intro-mb-fill{height:100%;border-radius:100px;width:0%;transition:width 1.4s ease-out;}
-.intro-mb-val{font-size:clamp(7px,1.1vw,11px);color:rgba(255,255,255,0.25);min-width:clamp(18px,3.5vw,28px);flex-shrink:0;}
+/* Theme button */
+.il-theme-btn{position:fixed;bottom:24px;right:24px;z-index:100000;display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);cursor:pointer;transition:all 0.25s;}
+.il-theme-btn:hover{border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);}
+.il-theme-btn img{width:18px;height:18px;border-radius:4px;opacity:0.8;}
+.il-theme-btn span{font-size:11px;color:rgba(255,255,255,0.5);font-weight:500;letter-spacing:0.02em;}
 
-/* Done zone */
-.intro-done-zone{text-align:center;margin-top:clamp(6px,1vh,18px);opacity:0;transition:opacity 0.7s;pointer-events:none;flex-shrink:0;}
-.intro-done-zone.on{opacity:1;pointer-events:all;}
-.intro-done-zone p{font-size:clamp(10px,1.5vw,13px);color:rgba(255,255,255,0.45);margin-bottom:0;}
+/* Theme popup */
+.il-theme-popup{position:fixed;bottom:72px;right:24px;z-index:100001;width:210px;background:rgba(12,10,24,0.95);backdrop-filter:blur(20px);border:1px solid rgba(167,139,250,0.15);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 30px rgba(124,58,237,0.05);padding:12px;opacity:0;transform:translateY(6px) scale(0.96);transition:all 0.2s ease;pointer-events:none;}
+.il-theme-popup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
+.il-theme-popup-title{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin:0 0 8px 8px;}
+.il-theme-popup button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:none;background:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,0.75);transition:all 0.15s;}
+.il-theme-popup button:hover{background:rgba(167,139,250,0.12);color:#fff;}
+.il-theme-popup button svg{width:18px;height:18px;flex-shrink:0;}
 `;
 
-const STARS = [
-  { size: 1.8, left: "12%", top: "8%", dur: "4.2s", del: "0.5s" },
-  { size: 1.2, left: "28%", top: "15%", dur: "3.1s", del: "1.2s" },
-  { size: 2.1, left: "45%", top: "5%", dur: "5.0s", del: "0.3s" },
-  { size: 1.5, left: "67%", top: "12%", dur: "3.8s", del: "2.1s" },
-  { size: 1.9, left: "82%", top: "9%", dur: "4.5s", del: "0.8s" },
-  { size: 1.3, left: "93%", top: "20%", dur: "3.4s", del: "1.5s" },
-  { size: 2.3, left: "8%", top: "45%", dur: "5.2s", del: "0.1s" },
-  { size: 1.6, left: "22%", top: "62%", dur: "3.6s", del: "2.8s" },
-  { size: 1.1, left: "38%", top: "78%", dur: "4.8s", del: "1.0s" },
-  { size: 2.0, left: "55%", top: "85%", dur: "3.2s", del: "0.6s" },
-  { size: 1.4, left: "72%", top: "70%", dur: "4.1s", del: "3.2s" },
-  { size: 1.7, left: "88%", top: "55%", dur: "5.5s", del: "1.8s" },
-  { size: 2.5, left: "15%", top: "90%", dur: "3.9s", del: "0.4s" },
-  { size: 1.3, left: "50%", top: "35%", dur: "4.6s", del: "2.5s" },
-  { size: 1.8, left: "75%", top: "40%", dur: "3.3s", del: "1.1s" },
-  { size: 1.0, left: "60%", top: "92%", dur: "5.1s", del: "3.0s" },
-  { size: 2.2, left: "35%", top: "50%", dur: "4.3s", del: "0.9s" },
-  { size: 1.6, left: "5%", top: "30%", dur: "3.7s", del: "2.3s" },
+const STATUS_PILLS = [
+  { label: "Initializing", at: 5 },
+  { label: "Loading assets", at: 20 },
+  { label: "Building layout", at: 40 },
+  { label: "Rendering views", at: 60 },
+  { label: "Optimizing", at: 80 },
+  { label: "Ready", at: 95 },
 ];
 
-const ORBS_DATA = [
-  { size: 100, left: "15%", top: "25%", color: "#7c3aed", dur: "12s", del: "1s" },
-  { size: 140, left: "70%", top: "35%", color: "#a78bfa", dur: "14s", del: "2s" },
-  { size: 80, left: "40%", top: "65%", color: "#f472b6", dur: "10s", del: "0.5s" },
-  { size: 90, left: "85%", top: "75%", color: "#fb923c", dur: "13s", del: "3s" },
-];
+const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
+  left: `${Math.random() * 100}%`,
+  bottom: `${Math.random() * 30}%`,
+  delay: `${Math.random() * 6}s`,
+  dur: `${4 + Math.random() * 4}s`,
+}));
 
-const SLANG_TAGS = [
-  { label: "that girl energy", at: 8 },
-  { label: "it's giving", at: 18 },
-  { label: "slay queen", at: 28 },
-  { label: "no cap", at: 38 },
-  { label: "understood the assignment", at: 48 },
-  { label: "very demure", at: 57 },
-  { label: "hits different", at: 65 },
-  { label: "rizz unlocked", at: 73 },
-  { label: "ate and left no crumbs", at: 82 },
-  { label: "periodt.", at: 91 },
-];
-
-const FUN_CARDS = [
-  { icon: "☕", label: "coffees today", valueId: "coffee", at: 30 },
-  { icon: "🐛", label: "bugs squashed", value: "∞", at: 45 },
-  { icon: "🔥", label: "hot streak", value: "4 yrs", at: 60 },
-  { icon: "💅", label: "vibe check", value: "passed", at: 75 },
-];
-
-const MOOD_BARS = [
-  { label: "charisma", color: "#a78bfa", target: 92 },
-  { label: "drip level", color: "#f472b6", target: 99 },
-  { label: "big brain", color: "#34d399", target: 88 },
-  { label: "slay factor", color: "#fb923c", target: 100 },
-];
+function IntroThemeLogo({ id }: { id: string }) {
+  switch (id) {
+    case "cosmic":
+      return (
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="4" fill="#bf5af2" />
+          <path d="M12 2v3m0 14v3M4.93 4.93l2.12 2.12m9.9 9.9l2.12 2.12M2 12h3m14 0h3M4.93 19.07l2.12-2.12m9.9-9.9l2.12-2.12" stroke="#0a84ff" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="12" cy="12" r="8" stroke="url(#ai-grad-intro)" strokeWidth="1" strokeDasharray="2 3" />
+          <defs><linearGradient id="ai-grad-intro" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#0a84ff" /><stop offset="1" stopColor="#bf5af2" /></linearGradient></defs>
+        </svg>
+      );
+    case "macos":
+      return (
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.81-1.31.05-2.31-1.32-3.15-2.55C4.22 16.86 3 12.87 4.74 10.18c.87-1.33 2.41-2.17 4.06-2.19 1.29-.02 2.51.87 3.29.87.79 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.27-2.15 3.78.03 3 2.63 4 2.65 4.01-.03.07-.41 1.43-1.33 2.78zM15.42 3.5c.74-.9 1.25-2.14 1.11-3.38-1.07.04-2.37.72-3.14 1.62-.69.8-1.29 2.08-1.13 3.3 1.2.09 2.42-.61 3.16-1.54z" fill="#f5f5f7" />
+        </svg>
+      );
+    case "spotify":
+      return (
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="#1db954" />
+          <path d="M16.5 8.5c-2.7-1.2-7-.8-7-.8s-.3 0-.3.3.3.3.3.3 3.8-.3 6.3.8c.2.1.4 0 .5-.2s0-.4-.2-.5zm-.5 2.3c-2.3-1-6-.7-6-.7s-.2 0-.2.2.2.3.2.3 3.3-.3 5.5.7c.2.1.3 0 .4-.2.1-.1 0-.3-.1-.3zm-.7 2.2c-2-.8-5-.5-5-.5s-.2 0-.2.2.2.2.2.2 2.7-.2 4.6.5c.2.1.3 0 .3-.1.1-.2 0-.3-.1-.3z" fill="white" />
+        </svg>
+      );
+    case "agentic":
+      return (
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="3" width="20" height="18" rx="3" stroke="#05ce91" strokeWidth="1.5" />
+          <path d="M6 9l3 3-3 3" stroke="#05ce91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 15h5" stroke="#ff9d00" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "netflix":
+      return (
+        <svg viewBox="0 0 24 24">
+          <path d="M5 2h4.5l5 14.5V2H19v20h-4.5l-5-14.5V22H5V2z" fill="#e50914" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
 
 export default function IntroLoader() {
   const [visible, setVisible] = useState(true);
   const [fadingOut, setFadingOut] = useState(false);
   const [pct, setPct] = useState(0);
-  const [typedText, setTypedText] = useState("");
-  const [moodVisible, setMoodVisible] = useState(false);
-  const [moodFill, setMoodFill] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
+  const { setTheme } = useTheme();
   const startRef = useRef<number | null>(null);
   const doneRef = useRef(false);
-  const typeRef = useRef({ mi: 0, ci: 0, deleting: false });
 
-  // Typing effect
-  useEffect(() => {
-    let cancelled = false;
-    const tick = () => {
-      if (cancelled) return;
-      const s = typeRef.current;
-      const cur = MESSAGES[s.mi];
-      if (!s.deleting) {
-        s.ci++;
-        if (s.ci > cur.length) {
-          s.deleting = true;
-          setTimeout(tick, 1900);
-          return;
-        }
-      } else {
-        s.ci--;
-        if (s.ci < 0) {
-          s.deleting = false;
-          s.ci = 0;
-          s.mi = (s.mi + 1) % MESSAGES.length;
-          setTimeout(tick, 280);
-          return;
-        }
-      }
-      setTypedText(MESSAGES[s.mi].slice(0, s.ci));
-      setTimeout(tick, s.deleting ? 38 : 52);
-    };
-    tick();
-    return () => { cancelled = true; };
-  }, []);
-
-  // Progress animation
   useEffect(() => {
     const animate = (ts: number) => {
       if (!startRef.current) startRef.current = ts;
@@ -208,126 +154,104 @@ export default function IntroLoader() {
       const p = Math.round(ease(raw) * 100);
       setPct(p);
 
-      if (p >= 50 && !moodVisible) {
-        setMoodVisible(true);
-        setTimeout(() => setMoodFill(true), 200);
-      }
-
       if (p >= 100 && !doneRef.current) {
         doneRef.current = true;
         setTimeout(() => {
           setFadingOut(true);
-          setTimeout(() => setVisible(false), 600);
-        }, 1500);
+          setTimeout(() => setVisible(false), 800);
+        }, 1200);
         return;
       }
       if (p < 100) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
-  }, [moodVisible]);
+  }, []);
 
   if (!visible) return null;
-
-  const coffeeCount = pct < 30 ? 0 : Math.min(Math.round(((pct - 30) / 70) * 3) + 1, 4);
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: LOADER_CSS }} />
-      <div className={`intro-lw${fadingOut ? " fade-out" : ""}`}>
-        <div className="intro-grid-bg" />
+      <div className={`il-wrap${fadingOut ? " fade-out" : ""}`}>
+        {/* Ambient orbs */}
+        <div className="il-orb il-orb-1" />
+        <div className="il-orb il-orb-2" />
+        <div className="il-orb il-orb-3" />
+        <div className="il-grid" />
 
-        {STARS.map((s, i) => (
+        {/* Floating particles */}
+        {PARTICLES.map((p, i) => (
           <div
             key={i}
-            className="intro-star"
-            style={{
-              width: s.size, height: s.size,
-              left: s.left, top: s.top,
-              animationDuration: s.dur, animationDelay: s.del,
-            }}
+            className="il-particle"
+            style={{ left: p.left, bottom: p.bottom, animationDelay: p.delay, animationDuration: p.dur }}
           />
         ))}
 
-        {ORBS_DATA.map((o, i) => (
-          <div
-            key={i}
-            className="intro-orb"
-            style={{
-              width: o.size, height: o.size,
-              left: o.left, top: o.top,
-              background: o.color, opacity: 0.04,
-              animationDuration: o.dur, animationDelay: o.del,
-            }}
-          />
-        ))}
-
-        <div className="intro-cl">
-          <div className="intro-vibes-pill">
-            <div className="intro-vdot">N</div>
-            <span>loading awesomeness...</span>
-          </div>
-
-          <div className="intro-coffee-stage">
-            <div className="intro-cup-shadow" />
-            <svg className="intro-cup3d" viewBox="0 0 180 180">
-              <path className="intro-stm" d="M68 62 C68 52,76 50,73 40" fill="none" stroke="#d4a76a" strokeWidth="2.5" strokeLinecap="round" />
-              <path className="intro-stm" d="M83 57 C83 46,93 44,89 32" fill="none" stroke="#d4a76a" strokeWidth="2.5" strokeLinecap="round" />
-              <path className="intro-stm" d="M97 62 C97 52,105 50,101 40" fill="none" stroke="#d4a76a" strokeWidth="2.5" strokeLinecap="round" />
-              <ellipse cx="90" cy="155" rx="48" ry="7" fill="#1a0d00" opacity="0.5" />
-              <ellipse cx="90" cy="150" rx="48" ry="7" fill="#3a1f00" />
-              <ellipse cx="90" cy="147" rx="48" ry="7" fill="#5a3200" />
-              <ellipse cx="82" cy="145" rx="18" ry="3" fill="#7a4a18" opacity="0.6" />
-              <path d="M56 102 L124 102 L113 142 L67 142 Z" fill="#6b3a1f" />
-              <path d="M56 102 L67 142 L61 142 L52 102 Z" fill="#3a1f09" opacity="0.6" />
-              <path d="M124 102 L113 142 L119 142 L128 102 Z" fill="#3a1f09" opacity="0.5" />
-              <ellipse cx="90" cy="102" rx="34" ry="9" fill="#45250e" />
-              <ellipse cx="90" cy="102" rx="28" ry="7.5" fill="#180b02" />
-              <ellipse cx="90" cy="102" rx="24" ry="6" fill="#2e1305" />
-              <path d="M82 100 C82 97,87 96,90 99 C93 96,98 97,98 100 C98 104,90 108,90 108 C90 108,82 104,82 100 Z" fill="#8b5a2b" opacity="0.65" />
-              <ellipse cx="84" cy="99" rx="5" ry="2" fill="#c9a96e" opacity="0.2" />
-              <path d="M124 111 C146 111,150 121,150 127 C150 133,146 139,124 139" fill="none" stroke="#6b3a1f" strokeWidth="9" strokeLinecap="round" />
-              <path d="M124 111 C142 111,146 121,146 127 C146 133,142 139,124 139" fill="none" stroke="#8b5235" strokeWidth="5" strokeLinecap="round" />
-              <path d="M69 104 C71 104,75 103,77 112 C75 124,73 134,75 140" fill="none" stroke="rgba(255,195,100,0.15)" strokeWidth="4" strokeLinecap="round" />
-              <text x="90" y="126" textAnchor="middle" fontFamily="Space Grotesk" fontSize="9" fontWeight="700" fill="rgba(255,200,100,0.3)" letterSpacing="2">NS</text>
-            </svg>
-          </div>
-
-          <div className="intro-hline">
-            <h1>This portfolio<br />is <span className="intro-gr">lowkey iconic ✨</span></h1>
-          </div>
-
-          <div className="intro-tmsg">
-            <span>{typedText}</span>
-            <span className="intro-cur" />
-          </div>
-
-          <div className="intro-progress-wrap">
-            <div className="intro-prog-top">
-              <span className="intro-prog-status">slay-o-meter</span>
-              <span className="intro-prog-num" style={pct >= 100 ? { color: "#a78bfa" } : undefined}>{pct}%</span>
+        <div className="il-content">
+          {/* Animated logo */}
+          <div className="il-logo">
+            <div className="il-logo-ring">
+              <div className="il-logo-dot" />
             </div>
-            <div className="intro-track">
-              <div className="intro-fill" style={{ width: `${pct}%` }}>
-                <div className="intro-glow-dot" />
-              </div>
+            <div className="il-logo-ring-2">
+              <div className="il-logo-dot-2" />
             </div>
-            <div className="intro-sub-track">
-              <div className="intro-sub-fill" style={{ width: `${Math.min(pct * 1.2, 100)}%` }} />
+            <div className="il-logo-center">NS</div>
+          </div>
+
+          <div className="il-title">
+            <span className="il-title-grad">Crafting Experience</span>
+          </div>
+          <p className="il-subtitle">
+            Building something beautiful — hold tight.
+          </p>
+
+          {/* Progress bar */}
+          <div className="il-progress">
+            <div className="il-prog-header">
+              <span className="il-prog-label">Progress</span>
+              <span className="il-prog-pct">{pct}%</span>
+            </div>
+            <div className="il-track">
+              <div className="il-fill" style={{ width: `${pct}%` }} />
             </div>
           </div>
 
-          <div className="intro-slang-wall">
-            {SLANG_TAGS.map((tag) => (
-              <span key={tag.label} className={`intro-s-tag${pct >= tag.at ? " on" : ""}`}>
-                {tag.label}
+          {/* Status pills */}
+          <div className="il-status">
+            {STATUS_PILLS.map((s) => (
+              <span key={s.label} className={`il-pill${pct >= s.at ? " on" : ""}`}>
+                {s.label}
               </span>
             ))}
           </div>
 
-          <div className={`intro-done-zone${pct >= 100 ? " on" : ""}`}>
-            <p>bestie, it&apos;s ready. you&apos;re so gonna love this era.</p>
+          {/* Completion message */}
+          <div className={`il-done${pct >= 100 ? " on" : ""}`}>
+            <p>Welcome to the portfolio.</p>
           </div>
         </div>
+      </div>
+
+      {/* Theme picker button */}
+      <button className="il-theme-btn" onClick={() => setThemeOpen((v) => !v)}>
+        <img src={assetPath("/images/theme-icon.png")} alt="Themes" />
+        <span>Try different themes</span>
+      </button>
+
+      {/* Theme popup */}
+      <div className={`il-theme-popup${themeOpen ? " open" : ""}`}>
+        <p className="il-theme-popup-title">Switch theme</p>
+        {THEMES.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => { setTheme(t.id); setThemeOpen(false); }}
+          >
+            <IntroThemeLogo id={t.id} />
+            <span>{t.label}</span>
+          </button>
+        ))}
       </div>
     </>
   );
